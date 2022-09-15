@@ -1,0 +1,41 @@
+{
+  "name": "minecraft_discord_management_bot",
+  "version": "1.0.0",
+  "description": "Discord Bot using Discord JS 14 to control Minecraft Servers directly from Discord.",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "nodemon src/index.js",
+    "deploy-commands": "node src/deploy-commands.js",
+    "delete-commands": "node src/delete-commands.js",
+    "lint": "npx eslint src/**",
+    "lint:fix": "npm run lint -- --fix",
+    "prettier": "npx prettier src test --check",
+    "prettier:fix": "npm run prettier -- --write",
+    "format": "npm run prettier:fix && npm run lint:fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/defnot001/Minecraft-Discord-Management-Bot.git"
+  },
+  "author": "defnot001",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/defnot001/Minecraft-Discord-Management-Bot/issues"
+  },
+  "homepage": "https://github.com/defnot001/Minecraft-Discord-Management-Bot#readme",
+  "dependencies": {
+    "@discordjs/rest": "^1.1.0",
+    "discord.js": "^14.3.0",
+    "minecraft-server-util": "^5.3.1",
+    "nodeactyl": "^3.3.0",
+    "save-dev": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "eslint": "^8.23.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "nodemon": "^2.0.19",
+    "prettier": "^2.7.1"
+  }
+}
