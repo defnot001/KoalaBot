@@ -1,6 +1,6 @@
 const util = require('minecraft-server-util');
 const { EmbedBuilder } = require('discord.js');
-const { embedColor } = require('../config.json');
+const { embedColor, server } = require('../config.json');
 
 const escapeMarkdown = (text) => {
   const unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1');
@@ -71,6 +71,15 @@ const queryMobcap = async (host, rconPort, rconPassword) => {
   return mobcap;
 };
 
+const generateServerChoices = () => {
+  const choices = [];
+
+  for (const s of Object.getOwnPropertyNames(server)) {
+    choices.push({ name: s, value: s });
+  }
+  return choices;
+};
+
 module.exports = {
   escapeMarkdown,
   buildDefaultEmbed,
@@ -78,4 +87,5 @@ module.exports = {
   runRconCommand,
   queryMSPT,
   queryMobcap,
+  generateServerChoices,
 };

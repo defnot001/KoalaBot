@@ -4,6 +4,7 @@ const {
   buildDefaultEmbed,
   queryMSPT,
   queryMobcap,
+  generateServerChoices,
 } = require('../helper-functions');
 const { server } = require('../../config.json');
 
@@ -16,14 +17,9 @@ module.exports = {
         .setName('server')
         .setDescription('The server you want info about.')
         .setRequired(true)
-        .addChoices(
-          { name: 'smp', value: 'smp' },
-          { name: 'cmp', value: 'cmp' },
-          { name: 'cmp2', value: 'cmp2' },
-          { name: 'copy', value: 'copy' },
-          { name: 'snapshots', value: 'snapshots' },
-        ),
+        .addChoices(...generateServerChoices()),
     ),
+
   async execute(interaction) {
     await interaction.deferReply();
 

@@ -3,6 +3,7 @@ const {
   buildDefaultEmbed,
   runRconCommand,
   escapeMarkdown,
+  generateServerChoices,
 } = require('../helper-functions');
 const { server } = require('../../config.json');
 
@@ -45,13 +46,7 @@ module.exports = {
             .setName('server')
             .setDescription('The Server you want the Whitelist from.')
             .setRequired(true)
-            .addChoices(
-              { name: 'smp', value: 'smp' },
-              { name: 'cmp', value: 'cmp' },
-              { name: 'cmp2', value: 'cmp2' },
-              { name: 'copy', value: 'copy' },
-              { name: 'snapshots', value: 'snapshots' },
-            ),
+            .addChoices(...generateServerChoices()),
         ),
     ),
   async execute(interaction) {

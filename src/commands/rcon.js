@@ -1,5 +1,8 @@
 const { SlashCommandBuilder, codeBlock } = require('discord.js');
-const { runRconCommand } = require('../helper-functions');
+const {
+  runRconCommand,
+  generateServerChoices,
+} = require('../helper-functions');
 const { server } = require('../../config.json');
 
 module.exports = {
@@ -11,13 +14,7 @@ module.exports = {
         .setName('server')
         .setDescription('The server you want to run a command on.')
         .setRequired(true)
-        .addChoices(
-          { name: 'smp', value: 'smp' },
-          { name: 'cmp', value: 'cmp' },
-          { name: 'cmp2', value: 'cmp2' },
-          { name: 'copy', value: 'copy' },
-          { name: 'snapshots', value: 'snapshots' },
-        ),
+        .addChoices(...generateServerChoices()),
     )
     .addStringOption((option) =>
       option
