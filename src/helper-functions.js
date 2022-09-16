@@ -22,16 +22,20 @@ const getServerStatus = (host, port) =>
   util.queryFull(host, port, { enableSRV: true });
 
 const runRconCommand = async (host, rconPort, rconPassword, command) => {
-  const options = { timeout: 1000 * 5 };
-  const rcon = new util.RCON();
+  try {
+    const options = { timeout: 1000 * 5 };
+    const rcon = new util.RCON();
 
-  await rcon.connect(host, rconPort, options);
-  await rcon.login(rconPassword, options);
+    await rcon.connect(host, rconPort, options);
+    await rcon.login(rconPassword, options);
 
-  const data = await rcon.execute(command);
+    const data = await rcon.execute(command);
 
-  await rcon.close();
-  return data;
+    await rcon.close();
+    return data;
+  } catch (err) {
+    return console.error(err);
+  }
 };
 
 const queryMSPT = async (host, rconPort, rconPassword) => {
@@ -67,7 +71,6 @@ const queryMobcap = async (host, rconPort, rconPassword) => {
       .replace(/^.{0,3}| \(.*\)|[[\]]/g, '')
       .replace(/, /g, ' | ');
   }
-
   return mobcap;
 };
 
