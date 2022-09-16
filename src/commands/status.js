@@ -43,7 +43,7 @@ module.exports = {
           { name: 'Performance', value: `**${mspt}** mspt | **${tps}** TPS` },
           {
             name: 'Hostile Mobcaps',
-            value: `Overworld: ${mobcap.overworld}\n The Nether: ${mobcap.the_nether}\n The End: ${mobcap.the_end}`,
+            value: `Overworld: ${mobcap.overworld}\nThe Nether: ${mobcap.the_nether}\nThe End: ${mobcap.the_end}`,
           },
           {
             name: 'Playercount',
