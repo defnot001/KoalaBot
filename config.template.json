@@ -1,0 +1,51 @@
+{
+  "bot": {
+    "token": "",
+    "clientId": ""
+  },
+  "guild": {
+    "guildId": ""
+  },
+  "pterodactyl": {
+    "url": "YOUR_PTERODACTYL_URL_HERE",
+    "apiKey": "YOUR_PTERODACTYL_API_KEY_HERE"
+  },
+  "embedColor": "0x35aa78",
+  "server": {
+    "smp": {
+      "ip": "",
+      "port": 25565,
+      "rconPort": 25566,
+      "rconPassword": "",
+      "operator": false
+    },
+    "cmp": {
+      "ip": "",
+      "port": 25575,
+      "rconPort": 25576,
+      "rconPassword": "",
+      "operator": true
+    },
+    "cmp2": {
+      "ip": "",
+      "port": 25585,
+      "rconPort": 25586,
+      "rconPassword": "",
+      "operator": true
+    },
+    "copy": {
+      "ip": "",
+      "port": 25595,
+      "rconPort": 25596,
+      "rconPassword": "",
+      "operator": true
+    },
+    "snapshots": {
+      "ip": "",
+      "port": 25605,
+      "rconPort": 25606,
+      "rconPassword": "",
+      "operator": true
+    }
+  }
+}
