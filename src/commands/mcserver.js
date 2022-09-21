@@ -3,9 +3,10 @@ const Nodeactyl = require('nodeactyl');
 const {
   generateServerChoices,
   buildDefaultEmbed,
+  buildConfirmButton,
   formatBytes,
   formatTime,
-} = require('../helper-functions');
+} = require('../util/helper-functions');
 const { server, pterodactyl } = require('../../config.json');
 
 module.exports = {
@@ -99,16 +100,29 @@ module.exports = {
         return;
       }
       if (interaction.options.getSubcommand() === 'stop') {
-        const stop = await ptero.stopServer(serverid);
-        if (stop === true) {
-          interaction.editReply(
-            `Successfully stopped Server ${bold(serverChoice)}!`,
-          );
-        } else {
-          interaction.editReply(
-            `Failed at stopping Server ${bold(serverChoice)}!`,
-          );
-        }
+        interaction.editReply(buildConfirmButton(choice, 'stop'));
+
+        const filter = (click) => click.user.id === interaction.user.id;
+        const collector = interaction.channel.createMessageComponentCollector({
+          max: 1,
+          time: 10000,
+          filter,
+        });
+
+        collector.on('collect', async (i) => {
+          const stop = await ptero.stopServer(serverid);
+          if (stop === true) {
+            await i.update({
+              content: `Successfully stopped Server ${bold(serverChoice)}!`,
+              components: [],
+            });
+          } else {
+            await i.update({
+              content: `Failed at stopping Server ${bold(serverChoice)}!`,
+              components: [],
+            });
+          }
+        });
         return;
       }
       if (interaction.options.getSubcommand() === 'restart') {
