@@ -1,10 +1,10 @@
 const { SlashCommandBuilder, inlineCode, bold } = require('discord.js');
 const {
   buildDefaultEmbed,
-  runRconCommand,
   escapeMarkdown,
   generateServerChoices,
-} = require('../helper-functions');
+} = require('../util/helper-functions');
+const { runRconCommand } = require('../util/mcserver');
 const { server } = require('../../config.json');
 
 module.exports = {

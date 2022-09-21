@@ -1,11 +1,9 @@
 const { SlashCommandBuilder } = require('discord.js');
 const {
-  getServerStatus,
   buildDefaultEmbed,
-  queryMSPT,
-  queryMobcap,
   generateServerChoices,
-} = require('../helper-functions');
+} = require('../util/helper-functions');
+const { getServerStatus, queryMSPT, queryMobcap } = require('../util/mcserver');
 const { server } = require('../../config.json');
 
 module.exports = {

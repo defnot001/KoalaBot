@@ -2,7 +2,7 @@ const { SlashCommandBuilder, codeBlock } = require('discord.js');
 const {
   runRconCommand,
   generateServerChoices,
-} = require('../helper-functions');
+} = require('../util/helper-functions');
 const { server } = require('../../config.json');
 
 module.exports = {
