@@ -6,7 +6,9 @@ const {
   buildConfirmButton,
   formatBytes,
   formatTime,
+  capitalizeFirstLetter,
 } = require('../util/helper-functions');
+const { startServer } = require('../util/pterodactyl');
 const { server, pterodactyl } = require('../../config.json');
 
 module.exports = {
@@ -77,30 +79,91 @@ module.exports = {
     await interaction.deferReply();
 
     const choice = interaction.options.getString('server');
-    const serverChoice = `${choice[0].toUpperCase()}${choice
-      .slice(1)
-      .toLowerCase()}`;
+    const serverChoice = capitalizeFirstLetter(choice);
+    const guildName = interaction.guild.name;
     const { serverid } = server[choice];
     const { url, apiKey } = pterodactyl;
 
     const ptero = new Nodeactyl.NodeactylClient(url, apiKey);
 
+    const subcommand = interaction.options.getSubcommand();
+
     try {
-      if (interaction.options.getSubcommand() === 'start') {
-        const start = await ptero.startServer(serverid);
-        if (start === true) {
+      const stats = await ptero.getServerUsages(serverid);
+
+      if (subcommand === 'stats') {
+        if (stats.current_state !== 'running') {
           interaction.editReply(
-            `Successfully started Server ${bold(serverChoice)}!`,
+            `${guildName} ${bold(serverChoice)} is currently ${
+              stats.current_state
+            }!`,
+          );
+          return;
+        }
+
+        const state = `${capitalizeFirstLetter(stats.current_state)}`;
+        const cpu = `${parseFloat(stats.resources.cpu_absolute).toFixed(2)}%`;
+        const memory = formatBytes(stats.resources.memory_bytes);
+        const disk = formatBytes(stats.resources.disk_bytes);
+        const uptime = formatTime(stats.resources.uptime);
+
+        const statsEmbed = buildDefaultEmbed(interaction.user)
+          .setTitle(`Server Stats KiwiTech ${serverChoice}`)
+          .setThumbnail(interaction.guild.iconURL())
+          .setColor('Green')
+          .addFields([
+            { name: 'State', value: state },
+            { name: 'Uptime', value: uptime },
+            { name: 'CPU', value: cpu, inline: true },
+            { name: 'Memory', value: memory.toString(), inline: true },
+            { name: 'Disk', value: disk.toString(), inline: true },
+          ]);
+
+        interaction.editReply({ embeds: [statsEmbed] });
+      } else if (subcommand === 'start') {
+        if (stats.current_state !== 'offline') {
+          interaction.editReply(
+            `Cannot start ${guildName} ${bold(
+              serverChoice,
+            )} because it is currently ${stats.current_state}!`,
           );
         } else {
-          interaction.editReply(
-            `Failed at starting Server ${bold(serverChoice)}!`,
-          );
+          const start = await startServer(serverid, serverChoice);
+          interaction.editReply(start);
         }
-        return;
-      }
-      if (interaction.options.getSubcommand() === 'stop') {
-        interaction.editReply(buildConfirmButton(choice, 'stop'));
+      } else {
+        if (subcommand === 'stop' && stats.current_state !== 'running') {
+          interaction.editReply(
+            `Cannot stop ${guildName} ${bold(
+              serverChoice,
+            )} because it is currently ${stats.current_state}!`,
+          );
+          return;
+        }
+
+        if (subcommand === 'restart' && stats.current_state !== 'running') {
+          interaction.editReply(
+            `Cannot restart ${guildName} ${bold(
+              serverChoice,
+            )} because it is currently ${stats.current_state}!`,
+          );
+          return;
+        }
+
+        if (subcommand === 'kill' && stats.current_state !== 'stopping') {
+          interaction.editReply(
+            `Cannot kill ${guildName} ${bold(
+              serverChoice,
+            )} because it is currently ${
+              stats.current_state
+            }! Servers can only be killed while they are stopping. `,
+          );
+          return;
+        }
+
+        interaction.editReply(
+          buildConfirmButton(serverChoice, interaction.guild, subcommand),
+        );
 
         const filter = (click) => click.user.id === interaction.user.id;
         const collector = interaction.channel.createMessageComponentCollector({
@@ -110,86 +173,41 @@ module.exports = {
         });
 
         collector.on('collect', async (i) => {
-          const stop = await ptero.stopServer(serverid);
-          if (stop === true) {
-            await i.update({
-              content: `Successfully stopped Server ${bold(serverChoice)}!`,
-              components: [],
-            });
+          if (i.customId === 'confirm') {
+            const performAction = () => {
+              if (subcommand === 'stop') return ptero.stopServer(serverid);
+              if (subcommand === 'kill') return ptero.killServer(serverid);
+              if (subcommand === 'restart')
+                return ptero.restartServer(serverid);
+              return false;
+            };
+
+            const result = await performAction();
+
+            if (result === true) {
+              const getAction = () => {
+                if (subcommand === 'stop') return 'stopped';
+                if (subcommand === 'kill') return 'killed';
+                if (subcommand === 'restart') return 'restarted';
+                return undefined;
+              };
+
+              i.update({
+                content: `Successfully ${getAction()} ${guildName} ${bold(
+                  serverChoice,
+                )}!`,
+                components: [],
+              });
+            }
           } else {
             await i.update({
-              content: `Failed at stopping Server ${bold(serverChoice)}!`,
+              content: `Cancelled Action ${
+                subcommand.toUpperCase
+              } for ${guildName} ${bold(serverChoice)}!`,
               components: [],
             });
           }
         });
-        return;
-      }
-      if (interaction.options.getSubcommand() === 'restart') {
-        const restart = await ptero.restartServer(serverid);
-        if (restart === true) {
-          interaction.editReply(
-            `Successfully restarted Server ${bold(serverChoice)}!`,
-          );
-        } else {
-          interaction.editReply(
-            `Failed at restarting Server ${bold(serverChoice)}!`,
-          );
-        }
-        return;
-      }
-      if (interaction.options.getSubcommand() === 'kill') {
-        const kill = ptero.killServer(serverid);
-        if (kill === true) {
-          interaction.editReply(
-            `Successfully killed Server ${bold(serverChoice)}!`,
-          );
-        } else {
-          interaction.editReply(
-            `Failed at killing Server ${bold(serverChoice)}!`,
-          );
-        }
-        return;
-      }
-      if (interaction.options.getSubcommand() === 'stats') {
-        const stats = await ptero.getServerUsages(serverid);
-
-        if (stats.current_state !== 'running') {
-          interaction.editReply(
-            `Server ${bold(serverChoice)} is currently ${stats.current_state}!`,
-          );
-          return;
-        }
-
-        const state = `${stats.current_state[0].toUpperCase()}${stats.current_state
-          .slice(1)
-          .toLowerCase()}`;
-        const cpu = `${parseFloat(stats.resources.cpu_absolute).toFixed(2)}%`;
-        const memory = formatBytes(stats.resources.memory_bytes);
-        const disk = formatBytes(stats.resources.disk_bytes);
-        const uptime = formatTime(stats.resources.uptime);
-
-        const statsEmbed = buildDefaultEmbed(interaction.user)
-          .setTitle(`Server Stats KiwiTech ${serverChoice}`)
-          .setThumbnail(interaction.guild.iconURL())
-          .addFields([
-            { name: 'State', value: state },
-            { name: 'Uptime', value: uptime },
-            { name: 'CPU', value: cpu, inline: true },
-            { name: 'Memory', value: memory.toString(), inline: true },
-            { name: 'Disk', value: disk.toString(), inline: true },
-          ]);
-
-        let embedColor = 'Green';
-        if (state === 'starting' || state === 'stopping') {
-          embedColor = 'Yellow';
-        } else if (state === 'offline') {
-          embedColor = 'Red';
-        }
-
-        statsEmbed.setColor(embedColor);
-
-        interaction.editReply({ embeds: [statsEmbed] });
       }
     } catch (err) {
       console.error(err);
