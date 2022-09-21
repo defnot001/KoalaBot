@@ -16,4 +16,4 @@ const startServer = async (serverId, serverChoice) => {
   return `Failed to start Server ${bold(serverChoice)}!`;
 };
 
-module.exports(startServer);
+module.exports = { startServer };
