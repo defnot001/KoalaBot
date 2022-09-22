@@ -25,11 +25,11 @@ const queryMSPT = async (host, rconPort, rconPassword) => {
     host,
     rconPort,
     rconPassword,
-    `script run reduce(system_info('server_last_tick_times'), _a+_, 0)/100`,
+    `script run reduce(system_info('server_last_tick_times'), _a+_, 0)/100`
   );
 
   const mspt = (Math.round(parseFloat(data.split(' ')[2]) * 100) / 100).toFixed(
-    2,
+    2
   );
   let tps;
 

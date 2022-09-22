@@ -78,7 +78,7 @@ const buildConfirmButton = (serverChoice, guild, action) => {
 
   const reply = {
     content: `Are you sure you want to ${action} ${guild.name} ${bold(
-      serverChoice,
+      serverChoice
     )}?`,
     components: [row],
   };

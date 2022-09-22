@@ -15,27 +15,27 @@ module.exports = {
       subcommand
         .setName('add')
         .setDescription(
-          'Adds a Player to the Whitelist on all Minecraft Servers.',
+          'Adds a Player to the Whitelist on all Minecraft Servers.'
         )
         .addStringOption((option) =>
           option
             .setName('ign')
             .setDescription('The Players In-Game Name.')
-            .setRequired(true),
-        ),
+            .setRequired(true)
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
         .setName('remove')
         .setDescription(
-          'Removes a Player from the Whitelist on all Minecraft Servers.',
+          'Removes a Player from the Whitelist on all Minecraft Servers.'
         )
         .addStringOption((option) =>
           option
             .setName('ign')
             .setDescription('The Players In-Game Name.')
-            .setRequired(true),
-        ),
+            .setRequired(true)
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -46,8 +46,8 @@ module.exports = {
             .setName('server')
             .setDescription('The Server you want the Whitelist from.')
             .setRequired(true)
-            .addChoices(...generateServerChoices()),
-        ),
+            .addChoices(...generateServerChoices())
+        )
     ),
   async execute(interaction) {
     await interaction.deferReply();
@@ -68,28 +68,28 @@ module.exports = {
               ip,
               rconPort,
               rconPassword,
-              `whitelist add ${ign}`,
-            ),
+              `whitelist add ${ign}`
+            )
           );
 
           if (server[s].operator === true) {
             opCheck.push(
-              await runRconCommand(ip, rconPort, rconPassword, `op ${ign}`),
+              await runRconCommand(ip, rconPort, rconPassword, `op ${ign}`)
             );
           }
         }
 
         await interaction.editReply(
           `Successfully added ${inlineCode(ign)} to the whitelist on ${bold(
-            whitelistCheck.length,
+            whitelistCheck.length
           )} servers.\nSuccessfully made ${inlineCode(
-            ign,
-          )} an operator on ${bold(opCheck.length)} servers.`,
+            ign
+          )} an operator on ${bold(opCheck.length)} servers.`
         );
       } catch (err) {
         console.error(err);
         await interaction.editReply(
-          'Something went wrong trying to execute this command! Please check if all servers are currently online.',
+          'Something went wrong trying to execute this command! Please check if all servers are currently online.'
         );
       }
     } else if (interaction.options.getSubcommand() === 'remove') {
@@ -108,28 +108,28 @@ module.exports = {
               ip,
               rconPort,
               rconPassword,
-              `whitelist remove ${ign}`,
-            ),
+              `whitelist remove ${ign}`
+            )
           );
 
           if (server[s].operator === true) {
             opCheck.push(
-              await runRconCommand(ip, rconPort, rconPassword, `deop ${ign}`),
+              await runRconCommand(ip, rconPort, rconPassword, `deop ${ign}`)
             );
           }
         }
 
         await interaction.editReply(
           `Successfully removed ${inlineCode(ign)} from the whitelist on ${bold(
-            whitelistCheck.length,
+            whitelistCheck.length
           )} servers.\nSuccessfully removed ${inlineCode(
-            ign,
-          )} as an operator on ${bold(opCheck.length)} servers.`,
+            ign
+          )} as an operator on ${bold(opCheck.length)} servers.`
         );
       } catch (err) {
         console.error(err);
         await interaction.editReply(
-          'Something went wrong trying to execute this command! Please check if all servers are currently online.',
+          'Something went wrong trying to execute this command! Please check if all servers are currently online.'
         );
       }
     } else if (interaction.options.getSubcommand() === 'list') {
@@ -142,7 +142,7 @@ module.exports = {
           ip,
           rconPort,
           rconPassword,
-          'whitelist list',
+          'whitelist list'
         );
 
         if (response === 'There are no whitelisted players') {

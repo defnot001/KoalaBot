@@ -14,13 +14,13 @@ module.exports = {
         .setName('server')
         .setDescription('The server you want to run a command on.')
         .setRequired(true)
-        .addChoices(...generateServerChoices()),
+        .addChoices(...generateServerChoices())
     )
     .addStringOption((option) =>
       option
         .setName('command')
         .setDescription('The command you want to run on the server')
-        .setRequired(true),
+        .setRequired(true)
     ),
 
   async execute(interaction) {
@@ -42,7 +42,7 @@ module.exports = {
         await interaction.editReply(codeBlock(response.toString()));
       } else {
         await interaction.editReply(
-          'The response from the server to this command exceeds the message character limit. Consider using the panel for this specific command next time.',
+          'The response from the server to this command exceeds the message character limit. Consider using the panel for this specific command next time.'
         );
       }
     } catch (err) {

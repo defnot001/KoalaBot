@@ -24,8 +24,8 @@ module.exports = {
             .setName('server')
             .setDescription('The Server you want to start.')
             .setRequired(true)
-            .addChoices(...generateServerChoices()),
-        ),
+            .addChoices(...generateServerChoices())
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -36,8 +36,8 @@ module.exports = {
             .setName('server')
             .setDescription('The Server you want to stop.')
             .setRequired(true)
-            .addChoices(...generateServerChoices()),
-        ),
+            .addChoices(...generateServerChoices())
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -48,8 +48,8 @@ module.exports = {
             .setName('server')
             .setDescription('The Server you want to restart.')
             .setRequired(true)
-            .addChoices(...generateServerChoices()),
-        ),
+            .addChoices(...generateServerChoices())
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -60,8 +60,8 @@ module.exports = {
             .setName('server')
             .setDescription('The Server you want to kill.')
             .setRequired(true)
-            .addChoices(...generateServerChoices()),
-        ),
+            .addChoices(...generateServerChoices())
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -72,8 +72,8 @@ module.exports = {
             .setName('server')
             .setDescription('The server you want to get Usage Statistics from.')
             .setRequired(true)
-            .addChoices(...generateServerChoices()),
-        ),
+            .addChoices(...generateServerChoices())
+        )
     ),
   async execute(interaction) {
     await interaction.deferReply();
@@ -96,7 +96,7 @@ module.exports = {
           interaction.editReply(
             `${guildName} ${bold(serverChoice)} is currently ${
               stats.current_state
-            }!`,
+            }!`
           );
           return;
         }
@@ -124,8 +124,8 @@ module.exports = {
         if (stats.current_state !== 'offline') {
           interaction.editReply(
             `Cannot start ${guildName} ${bold(
-              serverChoice,
-            )} because it is currently ${stats.current_state}!`,
+              serverChoice
+            )} because it is currently ${stats.current_state}!`
           );
         } else {
           const start = await startServer(serverid, serverChoice);
@@ -135,8 +135,8 @@ module.exports = {
         if (subcommand === 'stop' && stats.current_state !== 'running') {
           interaction.editReply(
             `Cannot stop ${guildName} ${bold(
-              serverChoice,
-            )} because it is currently ${stats.current_state}!`,
+              serverChoice
+            )} because it is currently ${stats.current_state}!`
           );
           return;
         }
@@ -144,8 +144,8 @@ module.exports = {
         if (subcommand === 'restart' && stats.current_state !== 'running') {
           interaction.editReply(
             `Cannot restart ${guildName} ${bold(
-              serverChoice,
-            )} because it is currently ${stats.current_state}!`,
+              serverChoice
+            )} because it is currently ${stats.current_state}!`
           );
           return;
         }
@@ -153,16 +153,16 @@ module.exports = {
         if (subcommand === 'kill' && stats.current_state !== 'stopping') {
           interaction.editReply(
             `Cannot kill ${guildName} ${bold(
-              serverChoice,
+              serverChoice
             )} because it is currently ${
               stats.current_state
-            }! Servers can only be killed while they are stopping. `,
+            }! Servers can only be killed while they are stopping. `
           );
           return;
         }
 
         interaction.editReply(
-          buildConfirmButton(serverChoice, interaction.guild, subcommand),
+          buildConfirmButton(serverChoice, interaction.guild, subcommand)
         );
 
         const filter = (click) => click.user.id === interaction.user.id;
@@ -194,7 +194,7 @@ module.exports = {
 
               i.update({
                 content: `Successfully ${getAction()} ${guildName} ${bold(
-                  serverChoice,
+                  serverChoice
                 )}!`,
                 components: [],
               });
@@ -213,7 +213,7 @@ module.exports = {
       console.error(err);
       await interaction.editReply({
         content: `Something went wrong trying to execute the command for the server ${bold(
-          serverChoice,
+          serverChoice
         )}!`,
         ephemeral: true,
       });

@@ -4,7 +4,7 @@ const { pterodactyl } = require('../../config.json');
 
 const ptero = new Nodeactyl.NodeactylClient(
   pterodactyl.url,
-  pterodactyl.apiKey,
+  pterodactyl.apiKey
 );
 
 const startServer = async (serverId, serverChoice) => {

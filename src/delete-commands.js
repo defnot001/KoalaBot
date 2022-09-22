@@ -7,7 +7,7 @@ const rest = new REST({ version: '10' }).setToken(bot.token);
 // for guild-based commands
 rest
   .delete(
-    Routes.applicationGuildCommand(bot.clientId, guild.guildId, 'commandId'),
+    Routes.applicationGuildCommand(bot.clientId, guild.guildId, 'commandId')
   )
   .then(() => console.log('Successfully deleted guild command'))
   .catch(console.error);

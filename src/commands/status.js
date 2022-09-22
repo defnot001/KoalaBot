@@ -15,7 +15,7 @@ module.exports = {
         .setName('server')
         .setDescription('The server you want info about.')
         .setRequired(true)
-        .addChoices(...generateServerChoices()),
+        .addChoices(...generateServerChoices())
     ),
 
   async execute(interaction) {
