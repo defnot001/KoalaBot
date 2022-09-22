@@ -1,29 +1,29 @@
 {
-  "name": "minecraft_discord_management_bot",
+  "name": "koalabot",
   "version": "1.0.0",
-  "description": "Discord Bot using Discord JS 14 to control Minecraft Servers directly from Discord.",
+  "description": "Discord.js v14 Bot for managing Minecraft Servers.",
   "main": "src/index.js",
   "type": "commonjs",
   "scripts": {
     "start": "nodemon src/index.js",
     "deploy-commands": "node src/deploy-commands.js",
     "delete-commands": "node src/delete-commands.js",
-    "lint": "npx eslint src/**",
-    "lint:fix": "npm run lint -- --fix",
-    "prettier": "npx prettier src test --check",
-    "prettier:fix": "npm run prettier -- --write",
-    "format": "npm run prettier:fix && npm run lint:fix"
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "prettier": "npx prettier --check ./src",
+    "prettier:fix": "npx prettier --write ./src",
+    "format:all": "npm run prettier:fix && npm run lint:fix"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/defnot001/Minecraft-Discord-Management-Bot.git"
+    "url": "git+https://github.com/defnot001/KoalaBot.git"
   },
-  "author": "defnot001",
+  "author": "defnot",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/defnot001/Minecraft-Discord-Management-Bot/issues"
+    "url": "https://github.com/defnot001/KoalaBot/issues"
   },
-  "homepage": "https://github.com/defnot001/Minecraft-Discord-Management-Bot#readme",
+  "homepage": "https://github.com/defnot001/KoalaBot#readme",
   "dependencies": {
     "@discordjs/rest": "^1.1.0",
     "discord.js": "^14.3.0",
