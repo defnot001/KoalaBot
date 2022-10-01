@@ -1,2 +1,6 @@
 config.json
-node-modules
+node_modules
+.env
+guildConfig.js
+mcConfig.js
+pteroConfig.js
