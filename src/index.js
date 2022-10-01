@@ -1,7 +1,7 @@
-const fs = require('node:fs');
-const path = require('node:path');
-const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const { bot } = require('../config.json');
+import fs from 'fs';
+import path from 'path';
+import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import { botEnv } from './config/environment';
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -11,6 +11,7 @@ const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs
   .readdirSync(commandsPath)
   .filter((file) => file.endsWith('.js'));
+
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs
   .readdirSync(eventsPath)
@@ -32,4 +33,4 @@ for (const file of eventFiles) {
   }
 }
 
-client.login(bot.token);
+client.login(botEnv.token);
