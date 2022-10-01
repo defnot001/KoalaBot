@@ -1,6 +1,6 @@
 const Nodeactyl = require('nodeactyl');
 const { bold } = require('discord.js');
-const { pterodactyl } = require('../../config.json');
+const { pterodactyl } = require('../../../config.json');
 
 const ptero = new Nodeactyl.NodeactylClient(
   pterodactyl.url,

@@ -7,7 +7,7 @@ const {
   bold,
 } = require('discord.js');
 
-const { embedColor, server } = require('../../config.json');
+const { embedColor, server } = require('../../../config.json');
 
 const escapeMarkdown = (text) => {
   const unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1');
