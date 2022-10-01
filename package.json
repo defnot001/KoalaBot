@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Discord.js v14 Bot for managing Minecraft Servers.",
   "main": "src/index.js",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "start": "nodemon src/index.js",
     "deploy-commands": "node src/deploy-commands.js",
@@ -27,6 +27,7 @@
   "dependencies": {
     "@discordjs/rest": "^1.1.0",
     "discord.js": "^14.3.0",
+    "dotenv": "^16.0.3",
     "minecraft-server-util": "^5.3.1",
     "nodeactyl": "^3.3.0",
     "save-dev": "^0.0.1-security"
