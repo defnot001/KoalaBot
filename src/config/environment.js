@@ -2,24 +2,26 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const botEnv = {
-  token: process.env.Bot_TOKEN,
+const botEnv = {
+  token: process.env.BOT_TOKEN,
   clientId: process.env.CLIENT_ID,
   guildId: process.env.GUILD_ID,
 };
 
-export const pteroEnv = {
+const pteroEnv = {
   url: process.env.URL,
   apikey: process.env.API_KEY,
 };
 
-export const rconPasswd = {
+const rconPasswd = {
   smp: process.env.SMP_RCON_PASSWORD,
   cmp: process.env.CMP_RCON_PASSWORD,
   cmp2: process.env.CMP2_RCON_PASSWORD,
   copy: process.env.COPY_RCON_PASSWORD,
   snapshots: process.env.SNAPSHOTS_RCON_PASSWORD,
 };
+
+export { botEnv, pteroEnv, rconPasswd };
 
 const errors = [];
 
@@ -41,4 +43,8 @@ for (const prop in rconPasswd) {
   }
 }
 
-throw new Error(errors.join('\n'));
+const undefinedEnv = errors.join('\n');
+
+if (errors.length > 0) {
+  throw new Error(undefinedEnv);
+}

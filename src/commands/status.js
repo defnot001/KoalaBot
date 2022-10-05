@@ -1,12 +1,12 @@
-const { SlashCommandBuilder } = require('discord.js');
-const {
-  buildDefaultEmbed,
-  generateServerChoices,
-} = require('../util/helper-functions');
-const { getServerStatus, queryMSPT, queryMobcap } = require('../util/mcserver');
-const { server } = require('../../config.json');
+import { SlashCommandBuilder } from 'discord.js';
+import buildDefaultEmbed from '../util/discord_helpers/defaultEmbed.js';
+import generateServerChoices from '../util/discord_helpers/serverChoices.js';
+import getServerStatus from '../util/mcserver/serverStatus.js';
+import queryMSPT from '../util/mcserver/queryMSPT.js';
+import queryMobcap from '../util/mcserver/queryMobcap.js';
+import mcconfig from '../config/mcConfig.js';
 
-module.exports = {
+const statusCommand = {
   data: new SlashCommandBuilder()
     .setName('status')
     .setDescription('Get the status of a Minecraft Server.')
@@ -22,15 +22,15 @@ module.exports = {
     await interaction.deferReply();
 
     const choice = interaction.options.getString('server');
-    const { ip, port, rconPort, rconPassword } = server[choice];
+    const { host, port, rconPort, rconPassword } = mcconfig[choice];
 
     try {
-      const result = await getServerStatus(ip, port);
+      const result = await getServerStatus(host, port);
       const playerlist =
         result.players.list.join('\n') || 'There is currently nobody online!';
 
-      const { mspt, tps } = await queryMSPT(ip, rconPort, rconPassword);
-      const mobcap = await queryMobcap(ip, rconPort, rconPassword);
+      const { mspt, tps } = await queryMSPT(host, rconPort, rconPassword);
+      const mobcap = await queryMobcap(host, rconPort, rconPassword);
 
       const statusEmbed = buildDefaultEmbed(interaction.user)
         .setTitle(`KiwiTech ${choice.toUpperCase()}`)
@@ -65,3 +65,5 @@ module.exports = {
     }
   },
 };
+
+export default statusCommand;

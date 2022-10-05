@@ -1,8 +1,8 @@
-const fs = require('node:fs');
-const path = require('node:path');
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord.js');
-const { bot, guild } = require('../../config.json');
+import fs from 'fs';
+import path from 'path';
+import { REST } from '@discordjs/rest';
+import { Routes } from 'discord.js';
+import { botEnv } from '../config/environment.js';
 
 const commands = [];
 const commandsPath = path.join(__dirname, 'commands');
@@ -16,10 +16,10 @@ for (const file of commandFiles) {
   commands.push(command.data.toJSON());
 }
 
-const rest = new REST({ version: '10' }).setToken(bot.token);
+const rest = new REST({ version: '10' }).setToken(botEnv.token);
 
 rest
-  .put(Routes.applicationGuildCommands(bot.clientId, guild.guildId), {
+  .put(Routes.applicationGuildCommands(botEnv.clientId, botEnv.guildId), {
     body: commands,
   })
   .then(() => console.log('Successfully registered application commands.'))

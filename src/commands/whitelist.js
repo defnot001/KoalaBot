@@ -1,13 +1,15 @@
-const { SlashCommandBuilder, inlineCode, bold } = require('discord.js');
-const {
-  buildDefaultEmbed,
+import {
+  SlashCommandBuilder,
   escapeMarkdown,
-  generateServerChoices,
-} = require('../util/helper-functions');
-const { runRconCommand } = require('../util/mcserver');
-const { server } = require('../../config.json');
+  inlineCode,
+  bold,
+} from 'discord.js';
+import buildDefaultEmbed from '../util/discord_helpers/defaultEmbed.js';
+import generateServerChoices from '../util/discord_helpers/serverChoices.js';
+import rconCommand from '../util/mcserver/rconCommand.js';
+import mcconfig from '../config/mcConfig.js';
 
-module.exports = {
+const whitelistCommand = {
   data: new SlashCommandBuilder()
     .setName('whitelist')
     .setDescription('Get information about the whitelist & add/remove users.')
@@ -54,27 +56,27 @@ module.exports = {
 
     if (interaction.options.getSubcommand() === 'add') {
       const ign = interaction.options.getString('ign');
-      const props = Object.getOwnPropertyNames(server);
+      const props = Object.getOwnPropertyNames(mcconfig);
 
       try {
         const whitelistCheck = [];
         const opCheck = [];
 
         for (const s of props) {
-          const { ip, rconPort, rconPassword } = server[s];
+          const { host, rconPort, rconPassword } = mcconfig[s];
 
           whitelistCheck.push(
-            await runRconCommand(
-              ip,
+            await rconCommand(
+              host,
               rconPort,
               rconPassword,
               `whitelist add ${ign}`
             )
           );
 
-          if (server[s].operator === true) {
+          if (mcconfig[s].operator === true) {
             opCheck.push(
-              await runRconCommand(ip, rconPort, rconPassword, `op ${ign}`)
+              await rconCommand(host, rconPort, rconPassword, `op ${ign}`)
             );
           }
         }
@@ -94,27 +96,27 @@ module.exports = {
       }
     } else if (interaction.options.getSubcommand() === 'remove') {
       const ign = interaction.options.getString('ign');
-      const props = Object.getOwnPropertyNames(server);
+      const props = Object.getOwnPropertyNames(mcconfig);
 
       try {
         const whitelistCheck = [];
         const opCheck = [];
 
         for (const s of props) {
-          const { ip, rconPort, rconPassword } = server[s];
+          const { host, rconPort, rconPassword } = mcconfig[s];
 
           whitelistCheck.push(
-            await runRconCommand(
-              ip,
+            await rconCommand(
+              host,
               rconPort,
               rconPassword,
               `whitelist remove ${ign}`
             )
           );
 
-          if (server[s].operator === true) {
+          if (mcconfig[s].operator === true) {
             opCheck.push(
-              await runRconCommand(ip, rconPort, rconPassword, `deop ${ign}`)
+              await rconCommand(host, rconPort, rconPassword, `deop ${ign}`)
             );
           }
         }
@@ -135,11 +137,11 @@ module.exports = {
     } else if (interaction.options.getSubcommand() === 'list') {
       const choice = interaction.options.getString('server');
 
-      const { ip, rconPort, rconPassword } = server[choice];
+      const { host, rconPort, rconPassword } = mcconfig[choice];
 
       try {
-        const response = await runRconCommand(
-          ip,
+        const response = await rconCommand(
+          host,
           rconPort,
           rconPassword,
           'whitelist list'
@@ -170,3 +172,5 @@ module.exports = {
     }
   },
 };
+
+export default whitelistCommand;

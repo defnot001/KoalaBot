@@ -18,6 +18,6 @@ export default async function rconCommand(
     await rcon.close();
     return data;
   } catch (err) {
-    return console.error(err);
+    return err;
   }
 }

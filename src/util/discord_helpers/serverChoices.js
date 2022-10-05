@@ -1,4 +1,4 @@
-import mcconfig from '../../config/mcConfig.template';
+import mcconfig from '../../config/mcConfig.js';
 
 export default function generateServerChoices() {
   const choices = [];
@@ -8,3 +8,5 @@ export default function generateServerChoices() {
   }
   return choices;
 }
+
+console.log(generateServerChoices());

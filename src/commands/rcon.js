@@ -1,11 +1,16 @@
-const { SlashCommandBuilder, codeBlock } = require('discord.js');
-const {
-  runRconCommand,
-  generateServerChoices,
-} = require('../util/helper-functions');
-const { server } = require('../../config.json');
+import { SlashCommandBuilder, codeBlock } from 'discord.js';
+import rconCommand from '../util/mcserver/rconCommand.js';
+import generateServerChoices from '../util/discord_helpers/serverChoices.js';
+import mcconfig from '../config/mcConfig.js';
 
-module.exports = {
+// const { SlashCommandBuilder, codeBlock } = require('discord.js');
+// const {
+//   runRconCommand,
+//   generateServerChoices,
+// } = require('../util/helper-functions');
+// const { server } = require('../../config.json');
+
+const runRconCommand = {
   data: new SlashCommandBuilder()
     .setName('run')
     .setDescription('Runs a command on a Minecraft Server.')
@@ -29,25 +34,22 @@ module.exports = {
     const choice = interaction.options.getString('server');
     const command = interaction.options.getString('command');
 
-    const { ip, rconPort, rconPassword } = server[choice];
+    const { host, rconPort, rconPassword } = mcconfig[choice];
 
-    try {
-      const response =
-        (await runRconCommand(ip, rconPort, rconPassword, command)) ||
-        `Command ran successfully, but there's no response.`;
+    const response =
+      (await rconCommand(host, rconPort, rconPassword, command)) ||
+      `Command ran successfully, but there's no response.`;
 
-      const maxMessageLength = 2000;
+    const maxMessageLength = 2000;
 
-      if (response.length < maxMessageLength) {
-        await interaction.editReply(codeBlock(response.toString()));
-      } else {
-        await interaction.editReply(
-          'The response from the server to this command exceeds the message character limit. Consider using the panel for this specific command next time.'
-        );
-      }
-    } catch (err) {
-      console.error(err);
-      await interaction.editReply('Server offline or unreachable!');
+    if (response.length < maxMessageLength) {
+      await interaction.editReply(codeBlock(response.toString()));
+    } else {
+      await interaction.editReply(
+        'The response from the server to this command exceeds the message character limit. Consider using the panel for this specific command next time.'
+      );
     }
   },
 };
+
+export default runRconCommand;

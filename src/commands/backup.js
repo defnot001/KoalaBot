@@ -1,13 +1,11 @@
-const { SlashCommandBuilder, time } = require('discord.js');
-const Nodeactyl = require('nodeactyl');
-const {
-  generateServerChoices,
-  capitalizeFirstLetter,
-  buildDefaultEmbed,
-} = require('../util/helper-functions');
-const { server, pterodactyl } = require('../../config.json');
+import { SlashCommandBuilder, time } from 'discord.js';
+import pteroClient from '../util/pterodactyl/pteroClient.js';
+import generateServerChoices from '../util/discord_helpers/serverChoices.js';
+import capitalizeFirstLetter from '../util/discord_helpers/capitalizeFirstLetter.js';
+import buildDefaultEmbed from '../util/discord_helpers/defaultEmbed.js';
+import pteroconfig from '../config/pteroConfig.js';
 
-module.exports = {
+const backupCommand = {
   data: new SlashCommandBuilder()
     .setName('backup')
     .setDescription('Control Backups on a Minecraft Server.')
@@ -84,13 +82,10 @@ module.exports = {
     const choice = interaction.options.getString('server');
     const serverChoice = capitalizeFirstLetter(choice);
     const subcommand = interaction.options.getSubcommand();
-    const { serverid } = server[choice];
-    const { url, apiKey } = pterodactyl;
-
-    const ptero = new Nodeactyl.NodeactylClient(url, apiKey);
+    const serverid = pteroconfig.severId[choice];
 
     if (subcommand === 'list') {
-      const backupList = await ptero.listServerBackups(serverid);
+      const backupList = await pteroClient.listServerBackups(serverid);
       let backupNames = [];
 
       for (let i = 0; i < backupList.length; i += 1) {
@@ -122,3 +117,5 @@ module.exports = {
     }
   },
 };
+
+export default backupCommand;

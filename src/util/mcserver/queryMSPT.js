@@ -1,4 +1,4 @@
-import rconCommand from './rconCommand';
+import rconCommand from './rconCommand.js';
 
 export default async function queryMSPT(host, rconPort, rconPassword) {
   const data = await rconCommand(

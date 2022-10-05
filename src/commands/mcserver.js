@@ -1,17 +1,15 @@
-const { SlashCommandBuilder, bold } = require('discord.js');
-const Nodeactyl = require('nodeactyl');
-const {
-  generateServerChoices,
-  buildDefaultEmbed,
-  buildConfirmButton,
-  formatBytes,
-  formatTime,
-  capitalizeFirstLetter,
-} = require('../util/helper-functions');
-const { startServer } = require('../util/pterodactyl');
-const { server, pterodactyl } = require('../../config.json');
+import { SlashCommandBuilder, bold } from 'discord.js';
+import pteroClient from '../util/pterodactyl/pteroClient.js';
+import generateServerChoices from '../util/discord_helpers/serverChoices.js';
+import buildDefaultEmbed from '../util/discord_helpers/defaultEmbed.js';
+import buildConfirmButton from '../util/discord_helpers/confirmButton.js';
+import formatBytes from '../util/discord_helpers/formatBytes.js';
+import formatTime from '../util/discord_helpers/formatTime.js';
+import capitalizeFirstLetter from '../util/discord_helpers/capitalizeFirstLetter.js';
+import startServer from '../util/pterodactyl/startServer.js';
+import pteroconfig from '../config/pteroConfig.js';
 
-module.exports = {
+const mcserverCommand = {
   data: new SlashCommandBuilder()
     .setName('mcserver')
     .setDescription('Control a Minecraft Server.')
@@ -81,15 +79,11 @@ module.exports = {
     const choice = interaction.options.getString('server');
     const serverChoice = capitalizeFirstLetter(choice);
     const guildName = interaction.guild.name;
-    const { serverid } = server[choice];
-    const { url, apiKey } = pterodactyl;
-
-    const ptero = new Nodeactyl.NodeactylClient(url, apiKey);
-
+    const serverid = pteroconfig.severId[choice];
     const subcommand = interaction.options.getSubcommand();
 
     try {
-      const stats = await ptero.getServerUsages(serverid);
+      const stats = await pteroClient.getServerUsages(serverid);
 
       if (subcommand === 'stats') {
         if (stats.current_state !== 'running') {
@@ -175,10 +169,12 @@ module.exports = {
         collector.on('collect', async (i) => {
           if (i.customId === 'confirm') {
             const performAction = () => {
-              if (subcommand === 'stop') return ptero.stopServer(serverid);
-              if (subcommand === 'kill') return ptero.killServer(serverid);
+              if (subcommand === 'stop')
+                return pteroClient.stopServer(serverid);
+              if (subcommand === 'kill')
+                return pteroClient.killServer(serverid);
               if (subcommand === 'restart')
-                return ptero.restartServer(serverid);
+                return pteroClient.restartServer(serverid);
               return false;
             };
 
@@ -220,3 +216,5 @@ module.exports = {
     }
   },
 };
+
+export default mcserverCommand;

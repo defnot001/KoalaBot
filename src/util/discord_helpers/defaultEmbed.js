@@ -1,5 +1,5 @@
 import { EmbedBuilder } from 'discord.js';
-import guildconfig from '../../config/guildConfig';
+import guildconfig from '../../config/guildConfig.js';
 
 export default function buildDefaultEmbed(user) {
   const defaultEmbed = new EmbedBuilder({

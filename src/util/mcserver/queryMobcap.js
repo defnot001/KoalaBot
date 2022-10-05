@@ -1,4 +1,4 @@
-import rconCommand from './rconCommand';
+import rconCommand from './rconCommand.js';
 
 export default async function queryMobcap(host, rconPort, rconPassword) {
   const dimensions = ['overworld', 'the_nether', 'the_end'];

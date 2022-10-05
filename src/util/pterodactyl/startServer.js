@@ -1,5 +1,5 @@
 import { bold } from 'discord.js';
-import pteroClient from './pteroClient';
+import pteroClient from './pteroClient.js';
 
 export default async function startServer(serverId, serverChoice) {
   const start = await pteroClient.startServer(serverId);
