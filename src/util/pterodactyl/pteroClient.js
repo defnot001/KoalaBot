@@ -6,6 +6,4 @@ const pteroClient = new Nodeactyl.NodeactylClient(
   pteroconfig.apikey
 );
 
-console.log(pteroClient);
-
 export default pteroClient;

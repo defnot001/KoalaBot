@@ -9,7 +9,6 @@ export const event = {
 
     try {
       await command.command.execute(interaction);
-      console.log(command.command.execute);
     } catch (error) {
       console.error(error);
       await interaction.reply({
