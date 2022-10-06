@@ -4,3 +4,4 @@ node_modules
 guildConfig.js
 mcConfig.js
 pteroConfig.js
+.DS_Store
