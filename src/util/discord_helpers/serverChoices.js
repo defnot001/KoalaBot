@@ -8,5 +8,3 @@ export default function generateServerChoices() {
   }
   return choices;
 }
-
-console.log(generateServerChoices());

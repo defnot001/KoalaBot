@@ -1,4 +1,4 @@
-module.exports = {
+export const event = {
   name: 'interactionCreate',
   async execute(interaction) {
     if (!interaction.isChatInputCommand()) return;
@@ -8,7 +8,8 @@ module.exports = {
     if (!command) return;
 
     try {
-      await command.execute(interaction);
+      await command.command.execute(interaction);
+      console.log(command.command.execute);
     } catch (error) {
       console.error(error);
       await interaction.reply({

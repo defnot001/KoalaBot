@@ -18,25 +18,23 @@ const commandFiles = fs
 
 for (const file of commandFiles) {
   const filePath = path.join(commandsPath, file);
-  console.log(filePath);
-  const command = import(filePath);
-  console.log(command);
-  // client.commands.set(command.data.name, command);
+  const command = await import(filePath);
+  client.commands.set(command.command.data.name, command);
 }
 
-// const eventsPath = path.join(__dirname, 'events');
-// const eventFiles = fs
-//   .readdirSync(eventsPath)
-//   .filter((file) => file.endsWith('.js'));
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs
+  .readdirSync(eventsPath)
+  .filter((file) => file.endsWith('.js'));
 
-// for (const file of eventFiles) {
-//   const filePath = path.join(eventsPath, file);
-//   const event = require(filePath);
-//   if (event.once) {
-//     client.once(event.name, event.execute);
-//   } else {
-//     client.on(event.name, event.execute);
-//   }
-// }
+for (const file of eventFiles) {
+  const filePath = path.join(eventsPath, file);
+  const event = await import(filePath);
+  if (event.once) {
+    client.once(event.event.name, event.event.execute);
+  } else {
+    client.on(event.event.name, event.event.execute);
+  }
+}
 
 client.login(botEnv.token);

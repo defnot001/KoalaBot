@@ -5,7 +5,7 @@ import capitalizeFirstLetter from '../util/discord_helpers/capitalizeFirstLetter
 import buildDefaultEmbed from '../util/discord_helpers/defaultEmbed.js';
 import pteroconfig from '../config/pteroConfig.js';
 
-const backupCommand = {
+export const command = {
   data: new SlashCommandBuilder()
     .setName('backup')
     .setDescription('Control Backups on a Minecraft Server.')
@@ -117,5 +117,3 @@ const backupCommand = {
     }
   },
 };
-
-export default backupCommand;

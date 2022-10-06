@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, codeBlock } from 'discord.js';
-import rconCommand from '../util/mcserver/rconCommand.js';
+import runRconCommand from '../util/mcserver/rconCommand.js';
 import generateServerChoices from '../util/discord_helpers/serverChoices.js';
 import mcconfig from '../config/mcConfig.js';
 
@@ -10,7 +10,7 @@ import mcconfig from '../config/mcConfig.js';
 // } = require('../util/helper-functions');
 // const { server } = require('../../config.json');
 
-const runRconCommand = {
+export const command = {
   data: new SlashCommandBuilder()
     .setName('run')
     .setDescription('Runs a command on a Minecraft Server.')
@@ -32,12 +32,12 @@ const runRconCommand = {
     await interaction.deferReply();
 
     const choice = interaction.options.getString('server');
-    const command = interaction.options.getString('command');
+    const rconCommand = interaction.options.getString('command');
 
     const { host, rconPort, rconPassword } = mcconfig[choice];
 
     const response =
-      (await rconCommand(host, rconPort, rconPassword, command)) ||
+      (await runRconCommand(host, rconPort, rconPassword, rconCommand)) ||
       `Command ran successfully, but there's no response.`;
 
     const maxMessageLength = 2000;
@@ -51,5 +51,3 @@ const runRconCommand = {
     }
   },
 };
-
-export default runRconCommand;

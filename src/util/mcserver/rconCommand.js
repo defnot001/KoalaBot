@@ -1,6 +1,6 @@
 import util from 'minecraft-server-util';
 
-export default async function rconCommand(
+export default async function runRconCommand(
   host,
   rconPort,
   rconPassword,

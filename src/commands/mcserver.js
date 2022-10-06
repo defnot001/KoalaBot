@@ -9,7 +9,7 @@ import capitalizeFirstLetter from '../util/discord_helpers/capitalizeFirstLetter
 import startServer from '../util/pterodactyl/startServer.js';
 import pteroconfig from '../config/pteroConfig.js';
 
-const mcserverCommand = {
+export const command = {
   data: new SlashCommandBuilder()
     .setName('mcserver')
     .setDescription('Control a Minecraft Server.')
@@ -216,5 +216,3 @@ const mcserverCommand = {
     }
   },
 };
-
-export default mcserverCommand;

@@ -6,10 +6,10 @@ import {
 } from 'discord.js';
 import buildDefaultEmbed from '../util/discord_helpers/defaultEmbed.js';
 import generateServerChoices from '../util/discord_helpers/serverChoices.js';
-import rconCommand from '../util/mcserver/rconCommand.js';
+import runRconCommand from '../util/mcserver/rconCommand.js';
 import mcconfig from '../config/mcConfig.js';
 
-const whitelistCommand = {
+export const command = {
   data: new SlashCommandBuilder()
     .setName('whitelist')
     .setDescription('Get information about the whitelist & add/remove users.')
@@ -66,7 +66,7 @@ const whitelistCommand = {
           const { host, rconPort, rconPassword } = mcconfig[s];
 
           whitelistCheck.push(
-            await rconCommand(
+            await runRconCommand(
               host,
               rconPort,
               rconPassword,
@@ -76,7 +76,7 @@ const whitelistCommand = {
 
           if (mcconfig[s].operator === true) {
             opCheck.push(
-              await rconCommand(host, rconPort, rconPassword, `op ${ign}`)
+              await runRconCommand(host, rconPort, rconPassword, `op ${ign}`)
             );
           }
         }
@@ -106,7 +106,7 @@ const whitelistCommand = {
           const { host, rconPort, rconPassword } = mcconfig[s];
 
           whitelistCheck.push(
-            await rconCommand(
+            await runRconCommand(
               host,
               rconPort,
               rconPassword,
@@ -116,7 +116,7 @@ const whitelistCommand = {
 
           if (mcconfig[s].operator === true) {
             opCheck.push(
-              await rconCommand(host, rconPort, rconPassword, `deop ${ign}`)
+              await runRconCommand(host, rconPort, rconPassword, `deop ${ign}`)
             );
           }
         }
@@ -140,7 +140,7 @@ const whitelistCommand = {
       const { host, rconPort, rconPassword } = mcconfig[choice];
 
       try {
-        const response = await rconCommand(
+        const response = await runRconCommand(
           host,
           rconPort,
           rconPassword,
@@ -172,5 +172,3 @@ const whitelistCommand = {
     }
   },
 };
-
-export default whitelistCommand;

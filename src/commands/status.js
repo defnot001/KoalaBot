@@ -6,7 +6,7 @@ import queryMSPT from '../util/mcserver/queryMSPT.js';
 import queryMobcap from '../util/mcserver/queryMobcap.js';
 import mcconfig from '../config/mcConfig.js';
 
-const statusCommand = {
+export const command = {
   data: new SlashCommandBuilder()
     .setName('status')
     .setDescription('Get the status of a Minecraft Server.')
@@ -65,5 +65,3 @@ const statusCommand = {
     }
   },
 };
-
-export default statusCommand;
