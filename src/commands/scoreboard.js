@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import queryScoreboard from '../util/mcserver/queryScoreboard.js';
 import scoreboardToImage from '../util/canvas/scoreboardToImage.js';
+import dictionary119 from '../assets/dictionary_1.19.js';
 
 const choices = [
   { name: 'Mined', value: 'm-' },
@@ -12,6 +13,8 @@ const choices = [
   { name: 'Killed', value: 'k-' },
   { name: 'Killed by', value: 'kb-' },
 ];
+
+const scoreboardObjectives = Object.keys(dictionary119).map((key) => key);
 
 export const command = {
   data: new SlashCommandBuilder()
@@ -41,14 +44,18 @@ export const command = {
     const objective = interaction.options.getString('item');
     const action = interaction.options.getString('action');
 
-    const scores = await queryScoreboard(objective);
+    if (!scoreboardObjectives.includes(objective)) {
+      interaction.editReply(`Item "${objective}" does not exist!`);
+    } else {
+      const scores = await queryScoreboard(objective);
 
-    const choice = choices.find((x) => x.value === action);
+      const choice = choices.find((x) => x.value === action);
 
-    const prettyfiedObjective = objective.replace(action, `${choice.name} `);
+      const prettyfiedObjective = objective.replace(action, `${choice.name} `);
 
-    const buffer = scoreboardToImage(prettyfiedObjective, scores);
+      const buffer = scoreboardToImage(prettyfiedObjective, scores);
 
-    await interaction.editReply({ files: [{ attachment: buffer }] });
+      await interaction.editReply({ files: [{ attachment: buffer }] });
+    }
   },
 };
