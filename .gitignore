@@ -1,7 +1,5 @@
-config.json
-node_modules
 .env
-guildConfig.js
-mcConfig.js
-pteroConfig.js
+node_modules
 .DS_Store
+config.ts
+dist
