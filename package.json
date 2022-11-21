@@ -24,11 +24,14 @@
     "canvas": "^2.10.1",
     "discord.js": "^14.6.0",
     "dotenv": "^16.0.3",
+    "glob": "^8.0.3",
     "minecraft-server-util": "^5.3.1",
     "nodeactyl": "^3.3.0",
     "save-dev": "^0.0.1-security"
   },
   "devDependencies": {
+    "@types/glob": "^8.0.0",
+    "@types/node": "^18.11.9",
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "@typescript-eslint/parser": "^5.44.0",
     "eslint": "^8.28.0",
