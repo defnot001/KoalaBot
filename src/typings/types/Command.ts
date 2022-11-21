@@ -1,5 +1,5 @@
 import type ExtendedInteraction from '../interfaces/ExtendedInteraction';
-import type { KiwiClient } from '../../structures/KiwiClient';
+import type { KoalaClient } from '../../structures/KoalaClient';
 import type {
   ChatInputApplicationCommandData,
   CommandInteractionOptionResolver,
@@ -7,16 +7,16 @@ import type {
 } from 'discord.js';
 
 interface ClientRunOptionsInterface {
-  client: KiwiClient;
+  client: KoalaClient;
   interaction: ExtendedInteraction;
   args: CommandInteractionOptionResolver;
 }
 
 type ExecuteFunctions = (options: ClientRunOptionsInterface) => any;
 
-type CommandType = {
+type TCommand = {
   userPermissions?: PermissionResolvable;
   execute: ExecuteFunctions;
 } & ChatInputApplicationCommandData;
 
-export default CommandType;
+export default TCommand;
