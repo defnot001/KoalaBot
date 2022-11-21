@@ -6940,6 +6940,6 @@ const dictionary119 = {
   'kb-zombified_piglin': 'kb-zombified_piglin',
   'kb-player': 'kb-player',
   'kb-fishing_bobber': 'kb-fishing_bobber',
-};
+} as const;
 
 export default dictionary119;
