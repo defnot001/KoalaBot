@@ -1,5 +1,5 @@
-import { KiwiClient } from './structures/KiwiClient';
+import { KoalaClient } from './structures/KoalaClient';
 
-export const client = new KiwiClient();
+export const client = new KoalaClient();
 
 client.start();
