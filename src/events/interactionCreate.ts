@@ -6,6 +6,7 @@ import type {
   TextBasedChannel,
   CommandInteractionOptionResolver,
 } from 'discord.js';
+import getErrorMessage from '../util/functions/errors';
 
 export default new Event('interactionCreate', async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
@@ -25,7 +26,7 @@ export default new Event('interactionCreate', async (interaction) => {
       interaction: interaction as IExtendedInteraction,
     });
   } catch (err) {
-    console.error(err);
+    console.error(getErrorMessage(err));
 
     if (interaction.guild) {
       errorLog({
