@@ -1,7 +1,3 @@
-import glob from 'glob';
-import config from '../config/config';
-import projectPaths from '../util/node/projectPaths';
-import { promisify } from 'util';
 import {
   ApplicationCommandDataResolvable,
   Client,
@@ -10,14 +6,20 @@ import {
   GatewayIntentBits,
   Partials,
 } from 'discord.js';
+import glob from 'glob';
+import { promisify } from 'util';
+import config from '../config/config';
+import projectPaths from '../util/node/projectPaths';
+import type {
+  TCommand,
+  IRegisterCommandOptions,
+} from '../typings/types/Command';
 import type { Event } from './Event';
-import type CommandType from '../util/types/CommandType';
-import type RegisterCommandOptionsInterface from '../util/interfaces/RegisterCommandOptions';
 
 const globPromise = promisify(glob);
 
-export class KiwiClient extends Client {
-  commands: Collection<string, CommandType> = new Collection();
+export class KoalaClient extends Client {
+  commands: Collection<string, TCommand> = new Collection();
 
   constructor() {
     super({
@@ -32,17 +34,14 @@ export class KiwiClient extends Client {
 
   start() {
     this.registerModules();
-    this.login(botConfig.token);
+    this.login(config.bot.token);
   }
 
   async importFile(filePath: string) {
     return (await import(filePath))?.default;
   }
 
-  async registerCommands({
-    commands,
-    guildID,
-  }: RegisterCommandOptionsInterface) {
+  async registerCommands({ commands, guildID }: IRegisterCommandOptions) {
     if (guildID) {
       const guild = this.guilds.cache.get(guildID);
 
@@ -74,7 +73,7 @@ export class KiwiClient extends Client {
     );
 
     for await (const path of commandPaths) {
-      const command: CommandType = await this.importFile(path);
+      const command: TCommand = await this.importFile(path);
       if (!command.name) return;
 
       this.commands.set(command.name, command);
@@ -83,7 +82,7 @@ export class KiwiClient extends Client {
 
     this.on('ready', () => {
       this.registerCommands({
-        guildID: botConfig.guildID,
+        guildID: config.bot.guildID,
         commands: slashCommands,
       });
     });
