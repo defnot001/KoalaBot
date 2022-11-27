@@ -1,5 +1,5 @@
 import colors from '../../config/colors';
-import config from '../../config/config';
+import { config } from '../../config/config';
 import { EmbedBuilder, TextBasedChannel } from 'discord.js';
 import { isTextChannel } from './typeChecks';
 import type { Guild } from 'discord.js';

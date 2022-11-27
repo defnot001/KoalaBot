@@ -8,7 +8,7 @@ import {
 } from 'discord.js';
 import glob from 'glob';
 import { promisify } from 'util';
-import config from '../config/config';
+import { config } from '../config/config';
 import projectPaths from '../util/node/projectPaths';
 import type {
   TCommand,
@@ -69,7 +69,7 @@ export class KoalaClient extends Client {
     // commands
     const slashCommands: ApplicationCommandDataResolvable[] = [];
     const commandPaths: string[] = await globPromise(
-      `${projectPaths.commands}/*/*{.ts,.js}`,
+      `${projectPaths.commands}/*{.ts,.js}`,
     );
 
     for await (const path of commandPaths) {
