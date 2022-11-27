@@ -26,7 +26,7 @@ export default new Event('interactionCreate', async (interaction) => {
       interaction: interaction as IExtendedInteraction,
     });
   } catch (err) {
-    console.error(getErrorMessage(err));
+    getErrorMessage(err);
 
     if (interaction.guild) {
       errorLog({

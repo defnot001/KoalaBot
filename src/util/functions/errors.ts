@@ -24,5 +24,7 @@ function toErrorWithMessage(maybeError: unknown): ErrorWithMessage {
 }
 
 export default function getErrorMessage(error: unknown) {
-  return toErrorWithMessage(error).message;
+  const errorMessage = toErrorWithMessage(error).message;
+  console.error(errorMessage);
+  return errorMessage;
 }
