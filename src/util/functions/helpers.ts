@@ -11,3 +11,8 @@ export const getServerChoices =
 
     return choices;
   };
+
+export const escapeMarkdown = (text: string): string => {
+  const unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1');
+  return unescaped.replace(/(\*|_|`|~|\\)/g, '\\$1');
+};
