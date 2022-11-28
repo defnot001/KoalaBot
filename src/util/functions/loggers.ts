@@ -1,4 +1,3 @@
-import colors from '../../config/colors';
 import { config } from '../../config/config';
 import { EmbedBuilder, TextBasedChannel } from 'discord.js';
 import { isTextChannel } from './typeChecks';
@@ -19,7 +18,7 @@ export function errorLog(options: IErrorOptions): void {
       iconURL: client.user.displayAvatarURL(),
     },
     description: `${errorMessage}`,
-    color: type === 'warn' ? colors.yellow : colors.red,
+    color: type === 'warn' ? config.colors.yellow : config.colors.red,
     footer: {
       text: 'KiwiBot Error Log',
     },
