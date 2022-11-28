@@ -2,9 +2,8 @@ import { ApplicationCommandOptionType, codeBlock } from 'discord.js';
 import { Command } from '../structures/Command';
 import { getServerChoices } from '../util/functions/helpers';
 import { mcConfig } from '../config/config';
-
-import type { IMinecraftConfig } from '../typings/interfaces/Config';
 import { runRconCommand } from '../util/rcon';
+import type { IMinecraftConfig } from '../typings/interfaces/Config';
 
 export default new Command({
   name: 'run',

@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, bold } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 import { Command } from '../structures/Command';
 import { KoalaEmbedBuilder } from '../structures/embeds/KoalaEmbedBuilder';
 import { getServerChoices } from '../util/functions/helpers';
