@@ -1,8 +1,8 @@
 import { queryFull, RCON } from 'minecraft-server-util';
 import getErrorMessage from './functions/errors';
-import { mcConfig } from '../config/config';
 import type { IMobcap } from '../typings/interfaces/RCON';
 import type { FullQueryResponse } from 'minecraft-server-util';
+import { escapeMarkdown } from './functions/helpers';
 
 export const getServerStatus = async (
   host: string,
@@ -93,4 +93,31 @@ export const queryMobcap = async (
 
   if (!isMobcap(mobcap)) return;
   return mobcap;
+};
+
+export const getWhitelist = async (
+  host: string,
+  rconPort: number,
+  rconPasswd: string,
+): Promise<string[] | string | undefined> => {
+  const response = await runRconCommand(
+    host,
+    rconPort,
+    rconPasswd,
+    'whitelist list',
+  );
+
+  if (!response) return;
+
+  const noWhitelist = 'There are no whitelisted players';
+
+  if (response === noWhitelist) {
+    return `${noWhitelist}!`;
+  }
+
+  return response
+    .split(': ')[1]
+    .split(', ')
+    .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+    .map((ign) => escapeMarkdown(ign));
 };
