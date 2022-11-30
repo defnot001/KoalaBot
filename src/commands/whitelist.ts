@@ -79,8 +79,9 @@ export default new Command({
       try {
         const response = await getWhitelist(host, rconPort, rconPasswd);
 
-        const whitelist =
-          response instanceof Array ? response.join('\n') : response;
+        const whitelist = !response
+          ? `There are no whitelisted players on ${choice}!`
+          : response.join('\n');
 
         const whitelistEmbed = new KoalaEmbedBuilder(interaction.user, {
           title: `${choice.toUpperCase()} Whitelist`,
