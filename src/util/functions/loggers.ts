@@ -1,44 +1,46 @@
 import { config } from '../../config/config';
-import { EmbedBuilder, TextBasedChannel } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import { isTextChannel } from './typeChecks';
 import type { Guild } from 'discord.js';
-import type { IErrorOptions } from '../../typings/interfaces/Errors';
+import type { IInteractionErrorOptions } from '../../typings/interfaces/Errors';
 
-export function errorLog(options: IErrorOptions): void {
-  const { client, guild, type, errorMessage } = options;
-  const errorLog = getLogChannels(guild);
+export const errorLog = async (options: IInteractionErrorOptions) => {
+  const { interaction, errorMessage } = options;
 
-  if (!client.user) {
+  if (!interaction.guild) {
+    throw new Error('This interaction was not created in a guild!');
+  }
+
+  const errorLog = await getLogChannels(interaction.guild);
+
+  if (!interaction.client.user) {
     throw new Error('This client does not have a user!');
   }
 
-  const errorEmbed = new EmbedBuilder({
+  const clientUser = interaction.client.user;
+
+  const chatInputInteractionErrorEmbed = new EmbedBuilder({
     author: {
-      name: client.user.username,
-      iconURL: client.user.displayAvatarURL(),
+      name: clientUser.username,
+      iconURL: clientUser.displayAvatarURL(),
     },
     description: `${errorMessage}`,
-    color: type === 'warn' ? config.colors.yellow : config.colors.red,
+    color: config.colors.red,
     footer: {
-      text: 'KiwiBot Error Log',
+      text: `${clientUser.username} Error Log`,
     },
     timestamp: Date.now(),
   });
 
-  errorLog.send({ embeds: [errorEmbed] });
-}
+  errorLog.send({ embeds: [chatInputInteractionErrorEmbed] });
+};
 
-export const getLogChannels = (guild: Guild): TextBasedChannel => {
-  const errorLogChannel = guild.channels.cache.get(config.channels.errorLog);
+export const getLogChannels = async (guild: Guild) => {
+  const errorLogChannel = await guild.channels.fetch(config.channels.errorLog);
 
   if (!errorLogChannel || !isTextChannel(errorLogChannel)) {
-    errorLog({
-      client: guild.client,
-      guild: guild,
-      type: 'error',
-      errorMessage: `Cannot get the log-channels.`,
-    });
-    throw new Error('Cannot get the log-Channels!');
+    throw new Error('Cannot get the error-log channel!');
   }
+
   return errorLogChannel;
 };

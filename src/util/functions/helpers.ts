@@ -17,6 +17,6 @@ export const escapeMarkdown = (text: string): string => {
   return unescaped.replace(/(\*|_|`|~|\\)/g, '\\$1');
 };
 
-export const includesUndefined = (array: unknown[]) => {
+export const includesUndefined = <T>(array: (T | undefined)[]) => {
   return array.includes(undefined);
 };

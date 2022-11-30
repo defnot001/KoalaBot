@@ -1,8 +1,6 @@
-import type { Client, Guild } from 'discord.js';
+import type IExtendedInteraction from './ExtendedInteraction';
 
-export interface IErrorOptions {
-  client: Client;
-  guild: Guild;
-  type: 'error' | 'warn';
+export interface IInteractionErrorOptions {
+  interaction: IExtendedInteraction;
   errorMessage: string;
 }

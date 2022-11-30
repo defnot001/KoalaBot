@@ -1,18 +1,9 @@
 import { queryFull, RCON } from 'minecraft-server-util';
-import getErrorMessage from './functions/errors';
 import type { IMobcap } from '../typings/interfaces/RCON';
-import type { FullQueryResponse } from 'minecraft-server-util';
 import { escapeMarkdown } from './functions/helpers';
 
-export const getServerStatus = async (
-  host: string,
-  port: number,
-): Promise<FullQueryResponse | undefined> => {
-  try {
-    return await queryFull(host, port, { enableSRV: true });
-  } catch (err) {
-    getErrorMessage(err);
-  }
+export const getServerStatus = async (host: string, port: number) => {
+  return await queryFull(host, port, { enableSRV: true });
 };
 
 export const runRconCommand = async (
@@ -20,37 +11,25 @@ export const runRconCommand = async (
   rconPort: number,
   rconPassword: string,
   command: string,
-): Promise<string | undefined> => {
+) => {
   const rconClient: RCON = new RCON();
 
-  try {
-    await rconClient.connect(host, rconPort);
-    await rconClient.login(rconPassword);
+  await rconClient.connect(host, rconPort);
+  await rconClient.login(rconPassword);
 
-    const data = await rconClient.execute(command);
+  const data = await rconClient.execute(command);
 
-    await rconClient.close();
-    return data;
-  } catch (err) {
-    getErrorMessage(err);
-  }
+  await rconClient.close();
+  return data;
 };
 
 export const queryMspt = async (
   host: string,
   rconPort: number,
   rconPassword: string,
-): Promise<
-  | {
-      mspt: number;
-      tps: number;
-    }
-  | undefined
-> => {
+) => {
   const command = `script run reduce(system_info('server_last_tick_times'), _a+_, 0)/100`;
   const data = await runRconCommand(host, rconPort, rconPassword, command);
-
-  if (!data) return;
 
   const mspt = Math.round(parseFloat(data.split(' ')[2]) * 100) / 100;
 
@@ -69,7 +48,7 @@ export const queryMobcap = async (
   host: string,
   rconPort: number,
   rconPassword: string,
-): Promise<IMobcap | undefined> => {
+) => {
   const dimensions = ['overworld', 'the_nether', 'the_end'];
 
   const mobcap: Record<string, string> = {};
@@ -77,8 +56,6 @@ export const queryMobcap = async (
   for (const dim of dimensions) {
     const query = `execute in minecraft:${dim} run script run get_mob_counts('monster')`;
     const res = await runRconCommand(host, rconPort, rconPassword, query);
-
-    if (!res) return;
 
     const data = res
       .replace(/^.{0,3}| \(.*\)|[[\]]/g, '')
@@ -91,7 +68,9 @@ export const queryMobcap = async (
     return 'overworld' in obj && 'the_nether' in obj && 'the_end' in obj;
   };
 
-  if (!isMobcap(mobcap)) return;
+  if (!isMobcap(mobcap)) {
+    throw new Error('Failed to query mobcaps!');
+  }
   return mobcap;
 };
 
@@ -99,7 +78,7 @@ export const getWhitelist = async (
   host: string,
   rconPort: number,
   rconPasswd: string,
-): Promise<string[] | string | undefined> => {
+) => {
   const response = await runRconCommand(
     host,
     rconPort,
@@ -107,12 +86,10 @@ export const getWhitelist = async (
     'whitelist list',
   );
 
-  if (!response) return;
-
   const noWhitelist = 'There are no whitelisted players';
 
   if (response === noWhitelist) {
-    return `${noWhitelist}!`;
+    return [];
   }
 
   return response

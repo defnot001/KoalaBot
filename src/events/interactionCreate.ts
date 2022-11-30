@@ -28,17 +28,8 @@ export default new Event('interactionCreate', async (interaction) => {
   } catch (err) {
     getErrorMessage(err);
 
-    if (interaction.guild) {
-      errorLog({
-        client: interaction.client,
-        guild: interaction.guild,
-        type: 'error',
-        errorMessage: `There was an error trying to execute ${interaction.commandName}!`,
-      });
-    }
-
     interaction.reply({
-      content: 'There was an error trying to execute this command',
+      content: 'There was an error trying to execute this command!',
       ephemeral: true,
     });
   }
