@@ -48,7 +48,7 @@ export const queryMobcap = async (
   host: string,
   rconPort: number,
   rconPassword: string,
-) => {
+): Promise<IMobcap> => {
   const dimensions = ['overworld', 'the_nether', 'the_end'];
 
   const mobcap: Record<string, string> = {};
