@@ -17,9 +17,15 @@ export const errorLog = async (options: IInteractionErrorOptions) => {
     throw new Error('This client does not have a user!');
   }
 
+  if (interaction.deferred) {
+    interaction.editReply(errorMessage);
+  } else if (interaction.isRepliable()) {
+    interaction.reply(errorMessage);
+  }
+
   const clientUser = interaction.client.user;
 
-  const chatInputInteractionErrorEmbed = new EmbedBuilder({
+  const interactionErrorEmbed = new EmbedBuilder({
     author: {
       name: clientUser.username,
       iconURL: clientUser.displayAvatarURL(),
@@ -32,7 +38,7 @@ export const errorLog = async (options: IInteractionErrorOptions) => {
     timestamp: Date.now(),
   });
 
-  errorLog.send({ embeds: [chatInputInteractionErrorEmbed] });
+  errorLog.send({ embeds: [interactionErrorEmbed] });
 };
 
 export const getLogChannels = async (guild: Guild) => {

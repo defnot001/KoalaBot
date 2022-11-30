@@ -1,4 +1,8 @@
-import { ApplicationCommandOptionType, codeBlock } from 'discord.js';
+import {
+  ApplicationCommandOptionType,
+  codeBlock,
+  inlineCode,
+} from 'discord.js';
 import { Command } from '../structures/Command';
 import { getServerChoices } from '../util/functions/helpers';
 import { mcConfig } from '../config/config';
@@ -61,11 +65,13 @@ export default new Command({
 
       interaction.editReply(codeBlock(response.toString()));
     } catch (err) {
-      interaction.editReply('Failed to execute the RCON command!');
+      getErrorMessage(err);
 
       errorLog({
         interaction: interaction,
-        errorMessage: getErrorMessage(err),
+        errorMessage: `Failed to execute the command: ${inlineCode(
+          command,
+        )} on ${choice}!`,
       });
     }
   },

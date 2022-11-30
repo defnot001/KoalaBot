@@ -93,11 +93,11 @@ export default new Command({
 
       interaction.editReply({ embeds: [statusEmbed] });
     } catch (err) {
-      interaction.editReply(`Failed to get the status of ${choice}!`);
+      getErrorMessage(err);
 
       errorLog({
         interaction: interaction,
-        errorMessage: getErrorMessage(err),
+        errorMessage: `Failed to get the status of ${choice}!`,
       });
     }
   },

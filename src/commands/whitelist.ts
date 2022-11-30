@@ -95,11 +95,11 @@ export default new Command({
 
         interaction.editReply({ embeds: [whitelistEmbed] });
       } catch (err) {
-        interaction.editReply(`Failed to get the whitelist for ${choice}!`);
+        getErrorMessage(err);
 
         errorLog({
           interaction: interaction,
-          errorMessage: getErrorMessage(err),
+          errorMessage: `Failed to get the whitelist for ${choice}!`,
         });
       }
     } else if (subcommand === 'add' || subcommand === 'remove') {
@@ -168,11 +168,11 @@ export default new Command({
                 ign,
               )} on one or more servers!`;
 
-        interaction.editReply(errorMessage);
+        getErrorMessage(err);
 
         errorLog({
           interaction: interaction,
-          errorMessage: getErrorMessage(err),
+          errorMessage: errorMessage,
         });
       }
     }
