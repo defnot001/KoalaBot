@@ -24,6 +24,15 @@ const environment: IENV = {
   channels: {
     errorLog: '', // Insert Error Log Channel ID here.
   },
+  colors: {
+    // fill out embed colors here
+    default: 3_517_048,
+    none: 3_092_790,
+    red: 13_382_451,
+    orange: 16_737_843,
+    yellow: 16_769_536,
+    green: 6_736_998,
+  },
 };
 
 const checkConfig = (cfg: IENV): IConfig | never => {
