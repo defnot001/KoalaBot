@@ -9,11 +9,11 @@ import {
 import glob from 'glob';
 import { promisify } from 'util';
 import { config } from '../config/config';
-import projectPaths from '../util/node/projectPaths';
 import type {
-  TCommand,
   IRegisterCommandOptions,
+  TCommand,
 } from '../typings/types/Command';
+import projectPaths from '../util/node/projectPaths';
 import type { Event } from './Event';
 
 const globPromise = promisify(glob);

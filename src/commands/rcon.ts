@@ -3,13 +3,13 @@ import {
   codeBlock,
   inlineCode,
 } from 'discord.js';
-import { Command } from '../structures/Command';
-import { getServerChoices } from '../util/functions/helpers';
 import { mcConfig } from '../config/config';
-import { runRconCommand } from '../util/rcon';
-import { errorLog } from '../util/functions/loggers';
-import getErrorMessage from '../util/functions/errors';
+import { Command } from '../structures/Command';
 import type { IMinecraftConfig } from '../typings/interfaces/Config';
+import getErrorMessage from '../util/functions/errors';
+import { getServerChoices } from '../util/functions/helpers';
+import { errorLog } from '../util/functions/loggers';
+import { runRconCommand } from '../util/rcon';
 
 export default new Command({
   name: 'run',

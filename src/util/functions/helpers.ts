@@ -1,5 +1,5 @@
-import { mcConfig } from '../../config/config';
 import type { ApplicationCommandOptionChoiceData } from 'discord.js';
+import { mcConfig } from '../../config/config';
 
 export const getServerChoices =
   (): ApplicationCommandOptionChoiceData<string>[] => {

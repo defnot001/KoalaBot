@@ -1,12 +1,12 @@
 import { ApplicationCommandOptionType, inlineCode } from 'discord.js';
+import { mcConfig } from '../config/config';
 import { Command } from '../structures/Command';
 import { KoalaEmbedBuilder } from '../structures/embeds/KoalaEmbedBuilder';
-import { getServerChoices } from '../util/functions/helpers';
-import { getWhitelist, runRconCommand } from '../util/rcon';
-import { errorLog } from '../util/functions/loggers';
-import { mcConfig } from '../config/config';
-import getErrorMessage from '../util/functions/errors';
 import type { IMinecraftConfig } from '../typings/interfaces/Config';
+import getErrorMessage from '../util/functions/errors';
+import { getServerChoices } from '../util/functions/helpers';
+import { errorLog } from '../util/functions/loggers';
+import { getWhitelist, runRconCommand } from '../util/rcon';
 
 export default new Command({
   name: 'whitelist',

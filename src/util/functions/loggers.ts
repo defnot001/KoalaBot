@@ -1,8 +1,8 @@
-import { config } from '../../config/config';
-import { EmbedBuilder } from 'discord.js';
-import { isTextChannel } from './typeChecks';
 import type { Guild } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
+import { config } from '../../config/config';
 import type { IInteractionErrorOptions } from '../../typings/interfaces/Errors';
+import { isTextChannel } from './typeChecks';
 
 export const errorLog = async (options: IInteractionErrorOptions) => {
   const { interaction, errorMessage } = options;
