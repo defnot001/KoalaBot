@@ -1,4 +1,5 @@
 import { queryFull, RCON } from 'minecraft-server-util';
+import { mcConfig } from '../config/config';
 import type { IMobcap } from '../typings/interfaces/RCON';
 import { escapeMarkdown } from './functions/helpers';
 
@@ -97,4 +98,18 @@ export const getWhitelist = async (
     .split(', ')
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
     .map((ign) => escapeMarkdown(ign));
+};
+
+export const queryScoreboard = async (scoreboardName: string) => {
+  const { host, rconPort, rconPasswd } = mcConfig.smp;
+  const query = `script run scores = []; for(system_info('server_whitelist'), put(scores, null, l('"' + _ + '"', scoreboard('${scoreboardName}', _)) )); print(scores)`;
+
+  const data = await runRconCommand(host, rconPort, rconPasswd, query);
+
+  const parsed = JSON.parse(data.split(' =')[0].replaceAll('null', '0')) as [
+    string,
+    number,
+  ][];
+
+  return parsed.filter(([, score]) => score !== 0);
 };
