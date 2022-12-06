@@ -35,16 +35,12 @@ export default new Command({
     const choice = args.getString('server');
     const command = args.getString('command');
 
-    if (!choice) {
-      return interaction.editReply('Please specify a server!');
-    }
-
-    if (!command) {
-      return interaction.editReply('Please provide a command!');
+    if (!choice || !command) {
+      return interaction.editReply('Missing arguments for this command!');
     }
 
     if (!interaction.guild) {
-      return interaction.reply('This command can only be used in a guild.');
+      return interaction.editReply('This command can only be used in a guild.');
     }
 
     const { host, rconPort, rconPasswd } =
@@ -63,11 +59,10 @@ export default new Command({
         );
       }
 
-      interaction.editReply(codeBlock(response.toString()));
+      return interaction.editReply(codeBlock(response.toString()));
     } catch (err) {
       getErrorMessage(err);
-
-      errorLog({
+      return errorLog({
         interaction: interaction,
         errorMessage: `Failed to execute the command: ${inlineCode(
           command,

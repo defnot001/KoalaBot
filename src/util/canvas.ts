@@ -50,7 +50,11 @@ export const scoreboardToImage = (
     ),
     20,
   ];
-  const playerAndScorePos = [2, 50];
+  const playerAndScorePos: [number, number] = [2, 50];
+
+  if (!titlePos[0] || !titlePos[1]) {
+    throw new Error('Failed to get title position.');
+  }
 
   // Write title
   ctx.fillStyle = ScoreboardConstants.white;

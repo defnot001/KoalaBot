@@ -87,10 +87,10 @@ export default new Command({
 
       const buffer = scoreboardToImage(prettyfiedObjective, leaderboard);
 
-      interaction.editReply({ files: [{ attachment: buffer }] });
+      return interaction.editReply({ files: [{ attachment: buffer }] });
     } catch (err) {
       getErrorMessage(err);
-      errorLog({
+      return errorLog({
         interaction: interaction,
         errorMessage: `Failed to get the scoreboard ${scoreboardName} from the server!`,
       });

@@ -91,11 +91,10 @@ export default new Command({
         statusEmbed.setThumbnail(guildIcon);
       }
 
-      interaction.editReply({ embeds: [statusEmbed] });
+      return interaction.editReply({ embeds: [statusEmbed] });
     } catch (err) {
       getErrorMessage(err);
-
-      errorLog({
+      return errorLog({
         interaction: interaction,
         errorMessage: `Failed to get the status of ${choice}!`,
       });

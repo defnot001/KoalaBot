@@ -94,11 +94,10 @@ export default new Command({
           whitelistEmbed.setThumbnail(iconURL);
         }
 
-        interaction.editReply({ embeds: [whitelistEmbed] });
+        return interaction.editReply({ embeds: [whitelistEmbed] });
       } catch (err) {
         getErrorMessage(err);
-
-        errorLog({
+        return errorLog({
           interaction: interaction,
           errorMessage: `Failed to get the whitelist for ${choice}!`,
         });
@@ -158,7 +157,7 @@ export default new Command({
                 ign,
               )} as an operator on ${opCheck.length} servers.`;
 
-        interaction.editReply(successMessage);
+        return interaction.editReply(successMessage);
       } catch (err) {
         const errorMessage =
           subcommand === 'add'
@@ -170,8 +169,7 @@ export default new Command({
               )} on one or more servers!`;
 
         getErrorMessage(err);
-
-        errorLog({
+        return errorLog({
           interaction: interaction,
           errorMessage: errorMessage,
         });
