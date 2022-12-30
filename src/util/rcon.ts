@@ -32,7 +32,13 @@ export const queryMspt = async (
   const command = `script run reduce(system_info('server_last_tick_times'), _a+_, 0)/100`;
   const data = await runRconCommand(host, rconPort, rconPassword, command);
 
-  const mspt = Math.round(parseFloat(data.split(' ')[2]) * 100) / 100;
+  const splitNumbers = data.split(' ')[2];
+
+  if (!splitNumbers) {
+    throw new Error('Failed to get parse the data from the server.');
+  }
+
+  const mspt = Math.round(parseFloat(splitNumbers) * 100) / 100;
 
   let tps: number;
 
@@ -93,8 +99,13 @@ export const getWhitelist = async (
     return [];
   }
 
-  return response
-    .split(': ')[1]
+  const splitResponse = response.split(': ')[1];
+
+  if (!splitResponse) {
+    throw new Error('Failed to parse the response correctly!');
+  }
+
+  return splitResponse
     .split(', ')
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
     .map((ign) => escapeMarkdown(ign));
@@ -105,8 +116,13 @@ export const queryScoreboard = async (scoreboardName: string) => {
   const query = `script run scores = []; for(system_info('server_whitelist'), put(scores, null, l('"' + _ + '"', scoreboard('${scoreboardName}', _)) )); print(scores)`;
 
   const data = await runRconCommand(host, rconPort, rconPasswd, query);
+  const splitData = data.split(' =')[0];
 
-  const parsed = JSON.parse(data.split(' =')[0].replaceAll('null', '0')) as [
+  if (!splitData) {
+    throw new Error('Failed to parse the data!');
+  }
+
+  const parsed = JSON.parse(splitData.replaceAll('null', '0')) as [
     string,
     number,
   ][];
