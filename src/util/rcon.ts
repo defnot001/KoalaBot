@@ -71,8 +71,14 @@ export const queryMobcap = async (
     mobcap[dim as keyof IMobcap] = data;
   }
 
-  const isMobcap = (obj: any): obj is IMobcap => {
-    return 'overworld' in obj && 'the_nether' in obj && 'the_end' in obj;
+  const isMobcap = (obj: unknown): obj is IMobcap => {
+    return (
+      typeof obj === 'object' &&
+      obj !== null &&
+      'overworld' in obj &&
+      'the_nether' in obj &&
+      'the_end' in obj
+    );
   };
 
   if (!isMobcap(mobcap)) {
