@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "ts-node src/index.ts",
+    "lint": "npx eslint .",
     "build": "rm -rf dist && tsc && cp src/assets/minecraft.ttf dist/assets/minecraft.ttf",
     "deploy": "rm -rf dist && tsc && cp src/assets/minecraft.ttf dist/assets/minecraft.ttf && node dist/index.js"
   },
@@ -30,8 +31,11 @@
   "devDependencies": {
     "@types/glob": "^8.0.0",
     "@types/node": "^18.11.9",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
+    "eslint": "^8.31.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",
-    "typescript": "^4.9.3"
+    "typescript": "^4.9.4"
   }
 }
