@@ -25,11 +25,12 @@ export default new Event('interactionCreate', async (interaction) => {
     `${interaction.user.tag} ${channelNameAddon} triggered an interaction.`,
   );
 
-  if (!command)
+  if (!command) {
     return interaction.reply({
       content: `This interaction does not exist!`,
       ephemeral: true,
     });
+  }
 
   try {
     return command.execute({
