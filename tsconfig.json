@@ -36,7 +36,6 @@
     "importHelpers": true,
     "alwaysStrict": true,
     "allowUnreachableCode": false,
-    "exactOptionalPropertyTypes": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
