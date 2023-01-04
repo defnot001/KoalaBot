@@ -1,9 +1,9 @@
-config.json
-node_modules
 .env
 guildConfig.js
 mcConfig.js
 pteroConfig.js
-.DS_Store
 dist
 config.ts
+node_modules
+src/config/config.ts
+.DS_Store
