@@ -51,7 +51,7 @@ export default new Command({
         status.players.list.join('\n') || 'There is currently nobody online.';
 
       const statusEmbed = new KoalaEmbedBuilder(interaction.user, {
-        title: `KiwiTech ${choice.toUpperCase()}`,
+        title: `${interaction.guild.name} ${choice.toUpperCase()}`,
         color: config.colors.green,
         fields: [
           { name: 'Status', value: 'Online' },
