@@ -1,4 +1,11 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ComponentType,
+  TextBasedChannel,
+} from 'discord.js';
+import type IExtendedInteraction from '../../typings/interfaces/ExtendedInteraction';
 import { getServerChoices } from '../functions/helpers';
 
 const confirmButton = new ButtonBuilder({
@@ -24,3 +31,14 @@ export const mcServerChoice = {
   required: true,
   choices: [...getServerChoices()],
 };
+
+export function getButtonCollector(
+  interaction: IExtendedInteraction,
+  channel: TextBasedChannel,
+) {
+  return channel.createMessageComponentCollector<ComponentType.Button>({
+    filter: (i) => i.user.id === interaction.user.id,
+    max: 1,
+    time: 10000,
+  });
+}

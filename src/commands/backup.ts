@@ -1,7 +1,6 @@
 import {
   ApplicationCommandOptionType,
   bold,
-  ComponentType,
   inlineCode,
   time,
 } from 'discord.js';
@@ -9,7 +8,10 @@ import { mcConfig } from '../config/config';
 import { Command } from '../structures/Command';
 import { KoalaEmbedBuilder } from '../structures/embeds/KoalaEmbedBuilder';
 import type { TServerChoice } from '../typings/types/typeHelpers';
-import { confirmCancelRow } from '../util/components/components';
+import {
+  confirmCancelRow,
+  getButtonCollector,
+} from '../util/components/components';
 import getErrorMessage from '../util/functions/errors';
 import { formatBytes, getServerChoices } from '../util/functions/helpers';
 import { errorLog } from '../util/functions/loggers';
@@ -167,14 +169,10 @@ export default new Command({
             );
           }
 
-          const collector =
-            interaction.channel.createMessageComponentCollector<ComponentType.Button>(
-              {
-                time: 10000,
-                max: 1,
-                filter: (click) => click.user.id === interaction.user.id,
-              },
-            );
+          const collector = getButtonCollector(
+            interaction,
+            interaction.channel,
+          );
 
           collector.on('collect', async (i) => {
             if (i.customId === 'confirm') {

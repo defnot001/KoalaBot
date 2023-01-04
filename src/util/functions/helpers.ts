@@ -1,6 +1,7 @@
 import type { ApplicationCommandOptionChoiceData } from 'discord.js';
 import { mcConfig } from '../../config/config';
 import type { TPowerActionNoStart } from '../../typings/types/typeHelpers';
+import { ptero } from '../pterodactyl';
 
 export function getServerChoices(): ApplicationCommandOptionChoiceData<string>[] {
   const choices = [];
@@ -52,12 +53,30 @@ export function capitalizeFirstLetter(string: string) {
 export function getAction(action: TPowerActionNoStart) {
   switch (action) {
     case 'start':
-      return 'Starting';
+      return 'started';
     case 'stop':
-      return 'Stopping';
+      return 'stopped';
     case 'restart':
-      return 'Restarting';
+      return 'restarted';
     default:
       throw new Error('Invalid action.');
+  }
+}
+
+export async function performAction(
+  action: TPowerActionNoStart,
+  serverId: string,
+): Promise<boolean> {
+  if (action === 'stop') {
+    await ptero.servers.stop(serverId);
+    return true;
+  } else if (action === 'restart') {
+    await ptero.servers.restart(serverId);
+    return true;
+  } else if (action === 'kill') {
+    await ptero.servers.kill(serverId);
+    return true;
+  } else {
+    return false;
   }
 }
