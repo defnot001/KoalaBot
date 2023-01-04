@@ -11,7 +11,7 @@ import { KoalaEmbedBuilder } from '../structures/embeds/KoalaEmbedBuilder';
 import type { IMinecraftConfig } from '../typings/interfaces/Config';
 import { confirmCancelRow } from '../util/components/buttons';
 import getErrorMessage from '../util/functions/errors';
-import { getServerChoices } from '../util/functions/helpers';
+import { getServerChoices, humanReadableSize } from '../util/functions/helpers';
 import { errorLog } from '../util/functions/loggers';
 import { ptero } from '../util/pterodactyl';
 
@@ -56,6 +56,26 @@ export default new Command({
           description: 'Whether or not the backup is locked.',
           type: ApplicationCommandOptionType.Boolean,
           required: false,
+        },
+      ],
+    },
+    {
+      name: 'details',
+      description: 'Get details about a backup.',
+      type: ApplicationCommandOptionType.Subcommand,
+      options: [
+        {
+          name: 'server',
+          description: 'The server you want to get the backups from.',
+          type: ApplicationCommandOptionType.String,
+          required: true,
+          choices: [...getServerChoices()],
+        },
+        {
+          name: 'backupid',
+          description: 'The uuid of the backup you want details from.',
+          type: ApplicationCommandOptionType.String,
+          required: true,
         },
       ],
     },
@@ -158,6 +178,8 @@ export default new Command({
 
           collector.on('collect', async (i) => {
             if (i.customId === 'confirm') {
+              // we can assert non null here because we verified earlier that we have exceeded the maximum amount of backups.
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               await ptero.backups.delete(serverId, backupData.data[0]!.uuid);
               const backup = await ptero.backups.create(serverId, {
                 backupName,
@@ -187,7 +209,72 @@ export default new Command({
           errorMessage: `Failed to create a backup for ${serverChoice}!`,
         });
       }
+    } else if (subcommand === 'details') {
+      const backupId = args.getString('backupid');
+
+      if (!backupId) {
+        return interaction.editReply('Please provide a backup uuid!');
+      }
+
+      try {
+        const backupDetails = await ptero.backups.getDetails(
+          serverId,
+          backupId,
+        );
+
+        const completedTime = backupDetails.completed_at
+          ? time(backupDetails.completed_at, 'f')
+          : 'Backup not completed.';
+
+        const backupEmbed = new KoalaEmbedBuilder(interaction.user, {
+          title: `Backup Details for ${guild.name} ${serverChoice}`,
+          fields: [
+            { name: 'Name', value: backupDetails.name },
+            {
+              name: 'UUID',
+              value: `${inlineCode(backupDetails.uuid)}`,
+            },
+            {
+              name: 'Size',
+              value: humanReadableSize(backupDetails.bytes),
+              inline: true,
+            },
+            {
+              name: 'Successful',
+              value: backupDetails.is_successful ? 'true' : 'false',
+              inline: true,
+            },
+            {
+              name: 'Locked',
+              value: backupDetails.is_locked ? 'true' : 'false',
+              inline: true,
+            },
+            {
+              name: 'Created at',
+              value: time(backupDetails.created_at, 'f'),
+              inline: true,
+            },
+            {
+              name: 'Completed at',
+              value: completedTime,
+              inline: true,
+            },
+          ],
+        });
+
+        // we have to check if the guild has an icon because there is no method that provides a default icon.
+        if (guild.iconURL()) {
+          backupEmbed.setThumbnail(guild.iconURL());
+        }
+
+        return interaction.editReply({ embeds: [backupEmbed] });
+      } catch (err) {
+        getErrorMessage(err);
+        return errorLog({
+          interaction: interaction,
+          errorMessage: `Failed to create a backup for ${serverChoice}!`,
+        });
+      }
     }
-    // return interaction.editReply('This is currently being tested.');
   },
 });
