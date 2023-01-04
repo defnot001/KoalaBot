@@ -2,7 +2,7 @@ import { ApplicationCommandOptionType, inlineCode } from 'discord.js';
 import { mcConfig } from '../config/config';
 import { Command } from '../structures/Command';
 import { KoalaEmbedBuilder } from '../structures/embeds/KoalaEmbedBuilder';
-import type { IMinecraftConfig } from '../typings/interfaces/Config';
+import type { TServerChoice } from '../typings/types/typeHelpers';
 import getErrorMessage from '../util/functions/errors';
 import { getServerChoices } from '../util/functions/helpers';
 import { errorLog } from '../util/functions/loggers';
@@ -69,8 +69,7 @@ export default new Command({
 
     if (subcommand === 'list') {
       const choice = args.getString('server');
-      const { host, rconPort, rconPasswd } =
-        mcConfig[choice as keyof IMinecraftConfig];
+      const { host, rconPort, rconPasswd } = mcConfig[choice as TServerChoice];
 
       if (!choice) {
         return interaction.editReply('Please specify a server!');
@@ -117,7 +116,7 @@ export default new Command({
       try {
         for await (const server of servers) {
           const { host, rconPort, rconPasswd } =
-            mcConfig[server as keyof IMinecraftConfig];
+            mcConfig[server as TServerChoice];
 
           const whitelistCommand = `whitelist ${subcommand} ${ign}`;
 
@@ -130,7 +129,7 @@ export default new Command({
 
           whitelistCheck.push([server, whitelist]);
 
-          if (mcConfig[server as keyof IMinecraftConfig].operator) {
+          if (mcConfig[server as TServerChoice].operator) {
             const action = subcommand === 'add' ? 'op' : 'deop';
             const opCommand = `${action} ${ign}`;
 

@@ -2,7 +2,7 @@ import { ApplicationCommandOptionType } from 'discord.js';
 import { config, mcConfig } from '../config/config';
 import { Command } from '../structures/Command';
 import { KoalaEmbedBuilder } from '../structures/embeds/KoalaEmbedBuilder';
-import type { IMinecraftConfig } from '../typings/interfaces/Config';
+import type { TServerChoice } from '../typings/types/typeHelpers';
 import getErrorMessage from '../util/functions/errors';
 import { getServerChoices } from '../util/functions/helpers';
 import { errorLog } from '../util/functions/loggers';
@@ -34,7 +34,7 @@ export default new Command({
     }
 
     const { host, port, rconPort, rconPasswd } =
-      mcConfig[choice as keyof IMinecraftConfig];
+      mcConfig[choice as TServerChoice];
 
     try {
       const status = await getServerStatus(host, port);

@@ -8,10 +8,10 @@ import {
 import { mcConfig } from '../config/config';
 import { Command } from '../structures/Command';
 import { KoalaEmbedBuilder } from '../structures/embeds/KoalaEmbedBuilder';
-import type { IMinecraftConfig } from '../typings/interfaces/Config';
-import { confirmCancelRow } from '../util/components/buttons';
+import type { TServerChoice } from '../typings/types/typeHelpers';
+import { confirmCancelRow } from '../util/components/components';
 import getErrorMessage from '../util/functions/errors';
-import { getServerChoices, humanReadableSize } from '../util/functions/helpers';
+import { formatBytes, getServerChoices } from '../util/functions/helpers';
 import { errorLog } from '../util/functions/loggers';
 import { ptero } from '../util/pterodactyl';
 
@@ -97,7 +97,7 @@ export default new Command({
       return interaction.editReply('Please choose a server.');
     }
 
-    const serverChoice = choice as keyof IMinecraftConfig;
+    const serverChoice = choice as TServerChoice;
     const { serverId } = mcConfig[serverChoice];
 
     if (subcommand === 'list') {
@@ -236,7 +236,7 @@ export default new Command({
             },
             {
               name: 'Size',
-              value: humanReadableSize(backupDetails.bytes),
+              value: formatBytes(backupDetails.bytes),
               inline: true,
             },
             {
@@ -272,7 +272,7 @@ export default new Command({
         getErrorMessage(err);
         return errorLog({
           interaction: interaction,
-          errorMessage: `Failed to create a backup for ${serverChoice}!`,
+          errorMessage: `Failed to get the backup details for ${serverChoice}!`,
         });
       }
     }

@@ -5,7 +5,7 @@ import {
 } from 'discord.js';
 import { mcConfig } from '../config/config';
 import { Command } from '../structures/Command';
-import type { IMinecraftConfig } from '../typings/interfaces/Config';
+import type { TServerChoice } from '../typings/types/typeHelpers';
 import getErrorMessage from '../util/functions/errors';
 import { getServerChoices } from '../util/functions/helpers';
 import { errorLog } from '../util/functions/loggers';
@@ -43,8 +43,7 @@ export default new Command({
       return interaction.editReply('This command can only be used in a guild.');
     }
 
-    const { host, rconPort, rconPasswd } =
-      mcConfig[choice as keyof IMinecraftConfig];
+    const { host, rconPort, rconPasswd } = mcConfig[choice as TServerChoice];
 
     try {
       const response =
