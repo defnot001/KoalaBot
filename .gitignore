@@ -5,3 +5,5 @@ guildConfig.js
 mcConfig.js
 pteroConfig.js
 .DS_Store
+dist
+config.ts
